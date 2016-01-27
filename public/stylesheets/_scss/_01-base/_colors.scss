@@ -1,0 +1,24 @@
+// -----------------------------------------------------------------------------
+// Color Classes
+// -----------------------------------------------------------------------------
+
+// Array of color variables found in _color-pallette.scss
+$colors: (
+  gray: $gray,
+  blue: $blue,
+  red:  $red,
+  green:  $green,
+);
+
+// each color
+@each $color in map-keys($colors) {
+  
+  // each color variable
+  @each $i in map-keys(map-get($colors, $color)) {
+    
+    // build color util class
+    @include color($color - $i, map-get(map-get($colors, $color), $i));
+ 
+  }
+  
+}

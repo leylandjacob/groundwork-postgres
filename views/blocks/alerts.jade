@@ -1,0 +1,4 @@
+ul(class="alerts")
+    if alert
+        li(class="alert animated fadeInDown #{alert.type ? alert.type : 'info'}")
+            span(class="alert-message") !{ alert.message ? alert.message : 'Sorry. Something did not work properly.' }

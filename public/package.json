@@ -1,0 +1,11 @@
+{
+  "name": "clareo-innovation-assessment",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+  	"jquery": "*",
+    "backbone": "*",
+    "underscore": "*",   
+    "bowser" : "*"
+  }
+}

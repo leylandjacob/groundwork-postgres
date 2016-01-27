@@ -1,0 +1,40 @@
+$base-serif-font:  'Sentinel A', 'Sentinel B', Helvetica, sans-serif;
+$base-sans-font: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+
+$font-color: map-get($gray, dark);
+$font-color-light: map-get($gray, main);
+$link-color: map-get($gray, light);
+
+$heading-font-family: $base-serif-font;
+$heading-font-weight: 600;
+
+$max-width: 1080px;
+
+$base-font-size: 1.375rem;
+
+$spacer:                     1rem !default;
+$spacer-x:                   $spacer !default;
+$spacer-y:                   $spacer !default;
+
+$base-border-radius: 8px;
+
+//
+// Media Queries & Breakpoints
+// 
+
+// Extra small screen / phone
+$screen-xs:                  480px !default;
+
+// Small screen / tablet
+$screen-sm:                  768px !default;
+
+// Medium screen / desktop
+$screen-md:                  992px !default;
+
+// Large screen / wide desktop
+$screen-lg:                  1200px !default;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max:              ($screen-sm - 1) !default;
+$screen-sm-max:              ($screen-md - 1) !default;
+$screen-md-max:              ($screen-lg - 1) !default;

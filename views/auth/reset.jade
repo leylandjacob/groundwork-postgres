@@ -1,0 +1,11 @@
+extends ../layout
+block content
+    .container
+        form(id="submit-reset" accept-charset="UTF-8" action="/reset/#{token}" method="POST" )
+            input(type="password" name="password" placeholder="new password")
+            input(type="password" name="password_confirm" placeholder="confirm password")
+            //
+                label
+                    input(class="trigger-show-password" type="checkbox" name="show_passwords")
+                    | Show passwords
+            button(class="trigger-submit-reset") Reset Password

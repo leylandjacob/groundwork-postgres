@@ -1,0 +1,7 @@
+extends ../layout
+block content
+    .container
+        form(id="request-reset" accept-charset="UTF-8" action="/forgot" method="POST")
+            input(type="email" name="email" class="email" placeholder="email")
+            button(class="trigger-request-reset") Send Reset Email
+            a(href="/login" title="Login") Login

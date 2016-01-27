@@ -1,0 +1,20 @@
+extends ../layout
+block content
+	.p-y-15.container.text-xs-center
+		.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
+			p.lead Log In
+			form(id="login", action="/login", method="POST", data-redirect=redirect ? redirect : '/')
+				.form-group
+					label.sr-only( for='email' ) Email Address
+					input.form-control(type='email', id='email', name="email", placeholder='email address')
+				.form-group
+					label.sr-only( for='password' ) Password
+					input.form-control(type='password', id='password', name="password", placeholder='password')
+				.form-group
+					button.trigger-login.btn.btn-primary.btn-loading.btn-block(type="submit",)
+						span.btn-loading-text Log In
+			//
+				small: a(href="/forgot", title="Forgot Password") Forgot Password?
+			br
+			small Don't have an account? 
+				a(href="/signup", title="Sign Up") Sign Up

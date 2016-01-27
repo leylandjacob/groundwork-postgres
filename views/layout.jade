@@ -1,0 +1,28 @@
+doctype html
+html
+    head
+        include ./blocks/meta
+
+        link(rel='stylesheet', href='/stylesheets/style.css')
+
+        script(data-main='/javascripts/main.js' src='/javascripts/require.js')
+
+        script(type='text/javascript').
+            define('config', !{JSON.stringify(config)});
+
+        script(type='text/javascript').
+            define('data', !{JSON.stringify(data)});
+    body
+        block header
+         include ./blocks/header
+
+        block content
+
+        block footer
+            include ./blocks/footer
+
+        block alerts
+            include blocks/alerts
+
+        block tracking
+            include ./blocks/tracking

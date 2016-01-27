@@ -1,0 +1,50 @@
+// -----------------------------------------------------------------------------
+// Color one in the pallete
+// These get built out in to color utils in base/_colors
+// -----------------------------------------------------------------------------
+
+// Gray
+$gray: (
+	lighter:		#fafafa,
+	light: 			#efefef,
+	main: 			#9a9a9a,
+	dark: 			#383838,
+	darker: 		#000000,
+);
+
+$red: (
+	lighter:	lighten(#f2655c, 25%),
+	light: 		lighten(#f2655c, 10%),
+	main: 		#f2655c,
+	dark: 		darken(#f2655c, 10%),
+	darker: 	darken(#f2655c, 25%),
+);
+
+$blue: (
+	lighter:	lighten(#11A4E7, 25%),
+	light: 		lighten(#11A4E7, 10%),
+	main: 		#11A4E7,
+	dark: 		darken(#11A4E7, 10%),
+	darker: 	darken(#11A4E7, 25%),
+);
+
+$green: (
+	lighter:	lighten(#49A539, 25%),
+	light: 		lighten(#49A539, 10%),
+	main: 		#49A539,
+	dark: 		darken(#49A539, 10%),
+	darker: 	darken(#49A539, 25%),
+);
+
+// -----------------------------------------------------------------------------
+// Social Icons
+// -----------------------------------------------------------------------------
+$social: (
+	twitter: 		#78cdf0,
+	facebook: 		#537bbd,
+	instagram: 		#517fa4,
+	youtube: 		#d34836,
+	snapchat: 		#fffc00,
+	pinterest:		#cb2027,
+	google: 		#dd4b39
+)

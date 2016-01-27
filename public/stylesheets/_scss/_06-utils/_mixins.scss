@@ -1,0 +1,16 @@
+// -----------------------------------------------------------------------------
+// Mixin
+// -----------------------------------------------------------------------------
+
+
+// Color util classes
+@mixin color($class-extension, $color){
+
+  .bg--#{$class-extension} {
+    background-color: $color;
+  }
+  .color--#{$class-extension}{
+    color: $color;
+  }
+
+}

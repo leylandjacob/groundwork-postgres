@@ -1,0 +1,11 @@
+extends layout
+
+block content
+	if PRODUCTION
+		//
+			TODO: ADD Production Error Page
+		h1 Error Page
+	else 
+		h1= message
+		h2= error.status
+		pre #{error.stack}
