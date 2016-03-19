@@ -6,15 +6,15 @@
  */
 module.exports = {
 	
-	secret : process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? process.env.APP_SECRET : 'UFEqoNgHsA36tRcrxECYKRCJuLMoNLYe',
+	secret : process.env.APP_SECRET ? process.env.APP_SECRET : 'UFEqoNgHsA36tRcrxECYKRCJuLMoNLYe',
 	
 	db:{
-		prefix: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? process.env.DATABASE_PREFIX : '',
-		host: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? process.env.DATABASE_HOST : '',
-		database: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? process.env.DATABASE_NAME : '',
-		username: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? process.env.DATABASE_USERNAME : '',
-		password: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? process.env.DATABASE_PASSWORD : '',
-		port: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development' ? process.env.DATABASE_PORT : '5432'
+		prefix: process.env.DATABASE_PREFIX ? process.env.DATABASE_PREFIX : '',
+		host: process.env.DATABASE_NAME ? process.env.DATABASE_HOST : '',
+		database: process.env.DATABASE_NAME ? process.env.DATABASE_NAME : '',
+		username: process.env.DATABASE_USERNAME ? process.env.DATABASE_USERNAME : '',
+		password: process.env.DATABASE_PASSWORD ? process.env.DATABASE_PASSWORD : '',
+		port: process.env.DATABASE_PORT ? process.env.DATABASE_PORT : '5432'
 
 	},
 	
@@ -24,7 +24,7 @@ module.exports = {
 	},
 	
 	mandrill: {
-		apiKey: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development'  ? process.env.MANDRILL_API_KEY : 'pX6MzCZEJMCruuoEE2J2kA'
+		apiKey: process.env.MANDRILL_API_KEY ? process.env.MANDRILL_API_KEY : 'pX6MzCZEJMCruuoEE2J2kA'
 	}
  
 };
