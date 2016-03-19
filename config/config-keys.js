@@ -15,7 +15,10 @@ module.exports = {
 		username: process.env.DATABASE_USERNAME ? process.env.DATABASE_USERNAME : '',
 		password: process.env.DATABASE_PASSWORD ? process.env.DATABASE_PASSWORD : '',
 		port: process.env.DATABASE_PORT ? process.env.DATABASE_PORT : '5432'
+	},
 
+	redis: {
+		url : process.env.REDIS_URL ? process.env.REDIS_URL : ''
 	},
 	
 	intercom: {

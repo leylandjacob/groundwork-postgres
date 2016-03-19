@@ -18,6 +18,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var compression = require('compression');
 var keys = require("./config/config-keys");
 var session = require('express-session');
 var passport = require('passport');
@@ -41,7 +42,6 @@ var knex = require('knex')({
 });
 
 bookshelf = require('bookshelf')(knex);
-
 
 var authLib = require('./libs/auth');
 var appLib = require('./libs/app');
@@ -67,6 +67,12 @@ var api_users = require('./routes/api/users');
 
 var app = express();
 
+// redis 
+var RedisStore = require('connect-redis')(session);
+
+// gzip and compression
+app.use(compression());
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -79,9 +85,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: keys.secret,
-    resave: true,
-    saveUninitialized: true
+	store: new RedisStore({
+		url: keys.redis.url,
+		//ttl: 7200
+	}),
+	secret: keys.secret,
+	resave: true,
+	saveUninitialized: true,
+	rolling: true
+	
 }));
 app.use(passport.initialize());
 app.use(passport.session());
