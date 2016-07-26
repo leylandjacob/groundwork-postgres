@@ -27,6 +27,8 @@ module.exports = {
 	 */
 	sendTemplate: function(emailObj, tempName, content, callback) {
 
+		'use strict';
+		
 		mandrill_client.messages.sendTemplate({ 
 			"template_name": tempName,
 			"template_content": content,
@@ -46,7 +48,9 @@ module.exports = {
 	 * @param {Function} callback
 	 */
 	send: function(emailObj, callback) {
-
+		
+		'use strict';
+		
 		mandrill_client.messages.send({message: emailObj}, function(result) {
 			callback(null, result);
 		}, function (error) {

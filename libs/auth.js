@@ -7,6 +7,7 @@
  */
 var express = require('express');
 var passport = require('passport');
+var winston = require('winston');
 var LocalStrategy = require('passport-local').Strategy;
 var keys = require('../config/config-keys');
 var messages = require('../config/config-messages');

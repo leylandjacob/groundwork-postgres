@@ -1,0 +1,7 @@
+.el {
+  position: absolute;
+}
+@include el(0, 0px);
+@include el(10, 10px);
+@include el(20, 20px);
+@include el(40, 40px);

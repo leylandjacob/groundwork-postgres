@@ -22,7 +22,7 @@ var compression = require('compression');
 var keys = require("./config/config-keys");
 var session = require('express-session');
 var passport = require('passport');
-require('express-jsend');
+var robots = require('robots.txt');
 
 /**
  *
@@ -42,29 +42,19 @@ var knex = require('knex')({
 });
 
 bookshelf = require('bookshelf')(knex);
+bookshelf.plugin('registry');
+bookshelf.plugin('pagination');
 
-var authLib = require('./libs/auth');
+var publicConfig = require('./config/config-app-public');
 var appLib = require('./libs/app');
 var Utils = require('./libs/utils');
 
 
 // logging
-winston = require('winston');
+var winston = require('winston');
 
-var logFile = PRODUCTION ? 'logs/log-production.log' : 'logs/log-dev.log';
 
-winston.add( winston.transports.File, {
-    filename: logFile,
-    timestamp: true,
-    json: true,
-    handleExceptions: true
-});
-
-// routes
-var home = require('./routes/app');
-var auth = require('./routes/auth');
-var api_users = require('./routes/api/users');
-
+// start the app
 var app = express();
 
 // redis 
@@ -79,6 +69,7 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public/images/favicon/', 'favicon.ico')));
+app.use(robots(__dirname + '/robots.txt'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -87,7 +78,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	store: new RedisStore({
 		url: keys.redis.url,
-		//ttl: 7200
+		logErrors: true,
+		no_ready_check: true
 	}),
 	secret: keys.secret,
 	resave: true,
@@ -100,7 +92,7 @@ app.use(passport.session());
 
 // api routes
 app.all('/api/*', Utils.authApiRequest );
-app.use('/api/users', api_users);
+app.use('/api/users', require('./routes/api/users'));
 
 
 // add locals to all routes
@@ -109,8 +101,8 @@ app.all('*', function(req, res, next) {
 });
 
 // routes
-app.use('/', home);
-app.use('/', auth);
+app.use('/', require('./routes/app'));
+app.use('/', require('./routes/auth'));
 
 
 // catch 404 and forward to error handler
@@ -127,15 +119,18 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-
+	
     app.use(function(err, req, res, next) {
 
+		'use strict';
+		
         res.status(err.status || 500);
         winston.error(err.message);
 
         res.render('error', {
             message: err.message,
-            error: err
+            error: err,
+			config: publicConfig
         });
 
     });
@@ -144,13 +139,15 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stack traces leaked to user
 app.use(function(err, req, res, next) {
-
+	
+	'use strict';
     res.status(err.status || 500);
     winston.error(err.message);
 
     res.render('error', {
         message: err.message,
-        error: {}
+        error: {},
+		config: publicConfig
     });
 
 });

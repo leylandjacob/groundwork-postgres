@@ -23,11 +23,16 @@ var Token = bookshelf.Model.extend({
 
 	},
 
+	/**
+	 *
+	 * beforeSave
+	 *
+	 */
 	beforeSave: function() {
 
 		'use strict';
 
-		//Sets the ID of a new model
+		// sets the ID of a new model
 		if(this.isNew()){
 			this.set({id : shortid.generate()});
 		}

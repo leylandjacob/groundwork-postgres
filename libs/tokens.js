@@ -16,24 +16,26 @@ var TokenModel = require('../models/token');
 
 module.exports = {
 
-    generatePasswordToken: function(userId, callback){
+	generatePasswordToken: function(userId, callback){
+		
+		'use strict';
+		
+		var token = Utils.generateToken();
+		var tomorrow = new Date();
+		tomorrow.setDate(tomorrow.getDate() + 1);
 
-        var token = Utils.generateToken();
-        var tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
+		var tokenModel = new TokenModel({
+			token: token,
+			active: true,
+			expires_at : tomorrow,
+			user : userId
+		});
 
-        var tokenModel = new TokenModel({
-            token: token,
-            active: true,
-            expires_at : tomorrow,
-            user : userId
-        });
-
-        tokenModel.save().then(function (token) {
-             callback(null, token.toJSON());
-        }).catch(function(error) {
-            callback(error.message, null);
-        });
-    }
+		tokenModel.save().then(function (token) {
+			 callback(null, token.toJSON());
+		}).catch(function(error) {
+			callback(error.message, null);
+		});
+	}
 
 };

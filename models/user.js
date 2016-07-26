@@ -26,6 +26,11 @@ var User = bookshelf.Model.extend({
 		
 	},
 
+	/**
+	 * 
+	 * beforeSave
+	 * 
+	 */
 	beforeSave: function() {
 
 		'use strict';
@@ -41,8 +46,17 @@ var User = bookshelf.Model.extend({
 		}
 	},
 
+	/**
+	 * 
+	 * comparePassword
+	 * 
+	 * @param candidatePassword
+	 * @param callback
+	 */
 	comparePassword: function(candidatePassword, callback) {
-
+		
+		'use strict';
+		
 		bcrypt.compare(candidatePassword, this.get('password'), function (error, isMatch) {
 
 			if (error) {

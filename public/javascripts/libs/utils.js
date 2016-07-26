@@ -7,9 +7,10 @@ define([
 
 	'jquery',
 	'config',
+    'data',
 	'bowser'
 	
-],	function($, config, bowser){
+],	function($, config, data, bowser){
 	
     return {
 
@@ -23,6 +24,21 @@ define([
         getConfig: function() {
             if (config) { //should loaded as a global on the page
                 return config;
+            }
+            return null;
+        },
+
+        /**
+         * Looks up bootstrapped data
+         * @param  {String} name
+         * @return {Object}
+         */
+        getData: function(name) {
+            if (!name){
+                return data;
+            }
+            if (data) {
+                return (data[name] ? data[name] : null);
             }
             return null;
         },

@@ -12,13 +12,36 @@ $colors: (
 
 // each color
 @each $color in map-keys($colors) {
-  
+
   // each color variable
   @each $i in map-keys(map-get($colors, $color)) {
-    
+
     // build color util class
     @include color($color - $i, map-get(map-get($colors, $color), $i));
- 
+
   }
-  
+
+}
+
+.color--white {
+  color: #ffffff;
+}
+
+a.color--white {
+  color: #ffffff;
+  &:hover {
+    color: darken(#ffffff, 10%);
+  }
+  &:focus {
+    color: darken(#ffffff, 10%);
+  }
+  &:visited {
+    color: darken(#ffffff, 10%);
+  }
+  &:active {
+    color: darken(#ffffff, 10%);
+  }
+}
+.bg--white {
+  background-color: white;
 }

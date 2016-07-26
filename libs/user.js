@@ -29,6 +29,9 @@ module.exports = {
 	 * @param next
 	 */
 	requireLogin: function(req, res, next) {
+
+		'use strict';
+		
 		if(!req.user){
 			return res.redirect('/');
 		}
@@ -45,6 +48,9 @@ module.exports = {
 	 * @param next
 	 */
 	requireNoLogin: function(req, res, next) {
+		
+		'use strict';
+		
 		if(req.user){
 			return res.redirect('/');
 		}
@@ -60,7 +66,9 @@ module.exports = {
 	 *
 	 */
 	updateIntercom: function(user, callback){
-	
+
+		'use strict';
+		
 		var intercom = new Intercom(intercom_settings);
 	
 		intercom.updateUser({
@@ -73,7 +81,7 @@ module.exports = {
 	
 		}, function(error, response) {
 		
-			callback(error, response)
+			callback(error, response);
 		
 		});	
 	}

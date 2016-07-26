@@ -8,6 +8,7 @@
 
 // required
 var crypto = require("crypto");
+var winston = require("winston");
 
 // models
 var TokenModel = require('../models/token');
@@ -110,22 +111,19 @@ module.exports = {
      */
     authApiRequest: function(req, res, next) {
 
+        'use strict';
+        
         var token = req.query.token;
 
-        if (typeof token == 'undefined' || token == '') {
+        if (typeof token === 'undefined' || token === '') {
             return res.jerror('Not Authorized');
         }
-        //TODO:
-        //check db for token here
-        //add more checks here
-        //check req url with the url in the DB
-        //use a secret/username to calculate the token
-        //have tokens expire
+ 
         var query = { token : token, active: true}
 
         new TokenModel(query).fetch().then(function( token ) {
 
-            if( token == null){
+            if( token === null){
 
                 winston.error('Not Authorized');
                 return res.jerror('Not Authorized', error.message);

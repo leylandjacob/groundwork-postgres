@@ -11,9 +11,9 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var async = require('async');
+var winston = require('winston');
 
 // libs
-var Utils = require('../libs/utils');
 var userLib = require('../libs/user');
 var tokenLib = require('../libs/tokens');
 var emailLib = require('../libs/email');
@@ -34,9 +34,9 @@ var TokenModel = require('../models/token');
  *
  */
 router.get('/login', userLib.requireNoLogin,  function(req, res) {
-
-    res.render('auth/login');
-
+	
+	'use strict';
+	res.render('auth/login');
 });
 
 /**
@@ -49,28 +49,29 @@ router.get('/login', userLib.requireNoLogin,  function(req, res) {
  */
 router.post('/login', function(req, res, next) {
 
-        passport.authenticate('local', function(error, user, info) {
+	'use strict';
+	
+	passport.authenticate('local', function(error, user, info) {
 
-            if (error || info && info.message === 'Missing credentials') {
-		   		return res.jerror('Bad Request', error);
-            }
+		if (error || info && info.message === 'Missing credentials') {
+			return res.jerror('Bad Request', error);
+		}
 
-            if (!user) {
-		   		return res.jerror('No User', info);
-            }
+		if (!user) {
+			return res.jerror('No User', info);
+		}
 
-            req.login(user, function(error) {
+		req.login(user, function(error) {
 
-                if (error) {
-                    return res.jerror('Bad Request', messages.loginError);
-                }
+			if (error) {
+				return res.jerror('Bad Request', messages.loginError);
+			}
 
-                return res.jsend();
+			return res.jsend();
 
-            });
+		});
 
-        })(req, res, next);
-    }
+	})(req, res, next);}
 );
 
 
@@ -84,9 +85,11 @@ router.post('/login', function(req, res, next) {
  *
  */
 router.get('/signup', userLib.requireNoLogin, function(req, res) {
-
-    res.render('auth/signup');
-
+	
+	'use strict';
+	
+	res.render('auth/signup');
+	
 });
 
 /*
@@ -98,10 +101,11 @@ router.get('/signup', userLib.requireNoLogin, function(req, res) {
  *
  */
 router.get('/logout', function(req, res) {
-
-    req.session.destroy();
-    res.redirect('/');
-
+	
+	'use strict';
+	req.session.destroy();
+	res.redirect('/');
+	
 });
 
 
@@ -114,9 +118,10 @@ router.get('/logout', function(req, res) {
  *
  */
 router.get('/forgot', userLib.requireNoLogin, function(req, res) {
-
-    res.render('auth/forgot');
-
+	
+	'use strict';
+	res.render('auth/forgot');
+	
 });
 
 /**
@@ -128,75 +133,76 @@ router.get('/forgot', userLib.requireNoLogin, function(req, res) {
  *
  */
 router.post('/forgot', userLib.requireNoLogin, function(req, res) {
+	
+	'use strict';
+	async.waterfall([
 
-    async.waterfall([
+		// find user
+		function(callback) {
+			new UserModel({email: req.body.email}).fetch().then(function (user) {
 
-        // find user
-        function(callback) {
-            new UserModel({email: req.body.email}).fetch().then(function (user) {
-
-                if (!user) {
-                    return callback(messages.userNotFound, null);
-                }
+				if (!user) {
+					return callback(messages.userNotFound, null);
+				}
 
 				callback(null, user.toJSON());
 
-            }).catch(function( error ) {
+			}).catch(function( error ) {
 				callback(error, null);
 			});
-        },
+		},
 
-        // add token to user
-        function(user, callback) {
+		// add token to user
+		function(user, callback) {
 
-            tokenLib.generatePasswordToken( user.id , function (error, token) {
-                callback(error, user, token);
-            });
+			tokenLib.generatePasswordToken( user.id , function (error, token) {
+				callback(error, user, token);
+			});
 
-        },
+		},
 
-        // send email
-        function(user, token, callback) {
+		// send email
+		function(user, token, callback) {
 
-            var link = (publicConfig.company.https ? 'https://' : 'http://') + publicConfig.company.domain + '/reset/' + token;
+			var link = (publicConfig.company.https ? 'https://' : 'http://') + publicConfig.company.domain + '/reset/' + token;
 
-            var emailObj = {
-                to: [{email: user.email}],
-                from_email: publicConfig.company.email.support,
-                from_name: publicConfig.company.appName,
-                subject: 'Password Reset for ' + publicConfig.company.appName,
-                html : '<a href="' + link + '">' + link + '</a>'
-            };
+			var emailObj = {
+				to: [{email: user.email}],
+				from_email: publicConfig.company.email.support,
+				from_name: publicConfig.company.appName,
+				subject: 'Password Reset for ' + publicConfig.company.appName,
+				html : '<a href="' + link + '">' + link + '</a>'
+			};
 
-            emailLib.send(emailObj, function(error, data) {
+			emailLib.send(emailObj, function(error, data) {
 
-                if (error) {
+				if (error) {
 
-                    callback(error, null);
+					callback(error, null);
 
-                } else {
+				} else {
 
-                    callback(null, data);
+					callback(null, data);
 
-                }
-            });
+				}
+			});
 
-        }
+		}
 
-    ], function( error, result )  {
+	], function( error, result )  {
 
-        if ( error ) {
+		if ( error ) {
 
-            winston.error( error );
-            res.jerror('Bad Request', error);
+			winston.error( error );
+			res.jerror('Bad Request', error);
 
-        } else {
+		} else {
 
-            res.jsend();
+			res.jsend();
 
-        }
+		}
 
-    });
+	});
 
 });
 
@@ -209,8 +215,10 @@ router.post('/forgot', userLib.requireNoLogin, function(req, res) {
  *
  */
 router.get('/reset/', userLib.requireNoLogin,  function(req, res) {
-    req.session.alert = messages.requiredToken;
-    res.redirect('/forgot');
+	'use strict';
+	req.session.alert = messages.requiredToken;
+	res.redirect('/forgot');
+	
 });
 
 /**
@@ -223,14 +231,16 @@ router.get('/reset/', userLib.requireNoLogin,  function(req, res) {
  */
 router.get('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 
-    var tokenSubmitted = req.params.token;
+	'use strict';
+	
+	var tokenSubmitted = req.params.token;
+	
+	if( !tokenSubmitted ) {
+		req.session.alert = messages.requiredToken;
+		return res.redirect('/forgot');
+	}
 
-    if( !tokenSubmitted ) {
-        req.session.alert = messages.requiredToken;
-        return res.redirect('/forgot');
-    }
-
-    new TokenModel({ token: tokenSubmitted }).fetch().then(function( token ) {
+	new TokenModel({ token: tokenSubmitted }).fetch().then(function( token ) {
 
 		if (!token) {
 
@@ -254,7 +264,7 @@ router.get('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 			}
 		}
 
-    }).catch(function () {
+	}).catch(function () {
 
 		req.session.alert = messages.resetError;
 		res.redirect('/forgot');
@@ -274,80 +284,80 @@ router.post('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 
 	'use strict';
 
-    var token = req.params.token;
-    var password = req.body.password;
-    var passwordConfirm = req.body.password_confirm;
+	var token = req.params.token;
+	var password = req.body.password;
+	var passwordConfirm = req.body.password_confirm;
 
-    if( !token ) {
-        return res.jerror('Bad Request', messages.requiredToken);
-    }
+	if( !token ) {
+		return res.jerror('Bad Request', messages.requiredToken);
+	}
 
-    if( !password || !passwordConfirm ) {
-        return res.jerror('Bad Request', messages.requiredPassword);
-    }
+	if( !password || !passwordConfirm ) {
+		return res.jerror('Bad Request', messages.requiredPassword);
+	}
 
-    if( password !== passwordConfirm ) {
-        return res.jerror('Bad Request', messages.invalidPasswordsDontMatch);
-    }
+	if( password !== passwordConfirm ) {
+		return res.jerror('Bad Request', messages.invalidPasswordsDontMatch);
+	}
 
-    new TokenModel({ token: token }).fetch().then(function( token ) {
+	new TokenModel({ token: token }).fetch().then(function( token ) {
 
-         if ( !token ) {
+		 if ( !token ) {
 
-            res.jerror('Bad Request', messages.resetTokenNotFound);
+			res.jerror('Bad Request', messages.resetTokenNotFound);
 
-        } else {
+		} else {
 
 			var now = new Date();
 
-            if( token.get('expires_at') <= now ) {
+			if( token.get('expires_at') <= now ) {
 
-                res.jerror('Bad Request', messages.resetTokenExpired);
+				res.jerror('Bad Request', messages.resetTokenExpired);
 
-            } else {
+			} else {
 
 				var user = new UserModel({id : token.get('user')});
 				user.fetch().then(function( user ) {
 
-                    if ( !user ) {
+					if ( !user ) {
 
-                        res.jerror('Bad Request', messages.userNotFound);
+						res.jerror('Bad Request', messages.userNotFound);
 
-                    } else {
+					} else {
 
-                        user.set('password', password);
+						user.set('password', password);
 
-                        user.save().then( function( user ) {
+						user.save().then( function( user ) {
 
-                            req.logIn( user, function(error) {
+							req.logIn( user, function(error) {
 
-                                if ( error ) {
-                                    return res.jerror('Bad Request', messages.loginError);
-                                }
+								if ( error ) {
+									return res.jerror('Bad Request', messages.loginError);
+								}
 
-                                token.set({active: false, used : 1});
+								token.set({active: false, used : 1});
 
-                                token.save().then(function() {
-                                    res.jsend();
-                                });
+								token.save().then(function() {
+									res.jsend();
+								});
 
-                            });
-                        }).catch(function( error ) {
+							});
+						}).catch(function( error ) {
 							return res.jerror('Bad Request', messages.generalError);
 						});
 
-                    }
+					}
 
-                }).catch( function( error ){
+				}).catch( function( error ){
 					return res.jerror('Bad Request', messages.resetError);
 				});
 
-            }
-        }
+			}
+		}
 
-    }).catch(function(error) {
+	}).catch(function(error) {
 		return res.jerror('Bad Request', messages.resetError);
 	});
 });
 
-module.exports = router;	
+module.exports = router;

@@ -1,1 +1,38 @@
+body, html, .content-wrapper{
+  background-color: white;
+  color: #3f3f3f;
+}
 
+img {
+  max-width: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+.align-middle {
+  vertical-align: middle;
+}
+
+.inline-block {
+  display: inline-block;
+
+  &.align-middle {
+    float: none;
+  }
+}
+
+.cursor--pointer {
+  cursor: pointer;
+}
+.cursor--move {
+  cursor: move;
+}
+.cursor--progress {
+  cursor: progress;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}

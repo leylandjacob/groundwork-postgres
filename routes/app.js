@@ -23,6 +23,8 @@ var messages = require('../config/config-messages');
 */
 router.get('/',  function(req, res) {
 
+	'use strict';
+	
 	if (req.user) {
 
 		res.render('app');
@@ -37,5 +39,3 @@ router.get('/',  function(req, res) {
 
 
 module.exports = router;
-
-	

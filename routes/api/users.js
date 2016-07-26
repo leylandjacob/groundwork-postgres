@@ -9,8 +9,9 @@
 // required modules
 var express = require('express');
 var router = express.Router();
+var winston = require('winston');
 var UserLib= require('../../libs/user');
-var Messages = require('../../config/config-Messages');
+var Messages = require('../../config/config-messages');
 
 // models
 var UserModel = require('../../models/user');
@@ -59,9 +60,11 @@ router.get('/:id', function(req, res) {
  *
  */
 router.post('/', function(req, res) {
+
+	'use strict';
 	
 	var newUser = new UserModel(req.body);
-
+	
 	newUser.save().then( function( user ) {
 
 			req.login(user, function (error) {
@@ -109,6 +112,8 @@ router.post('/', function(req, res) {
  */
 router.put('/:id', function(req, res) {
 
+	'use strict';
+	
 	var query = {id : req.params.id};
 	
 	var data = req.body;
@@ -148,6 +153,8 @@ router.put('/:id', function(req, res) {
  *
  */
 router.delete('/:id', function(req, res) {
+
+	'use strict';
 	
 	winston.error("We don't currently support DELETE user requests");
 	res.jerror('Bad request', 'We don"t currently support user delete requests');

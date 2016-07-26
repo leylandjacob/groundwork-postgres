@@ -23,7 +23,9 @@ module.exports = {
 	 * @param next
 	 */
 	setLocals: function(req, res, next) {
-
+		
+		'use strict';
+		
 		res.locals.data = {};
 		res.locals.config = publicConfig;
 

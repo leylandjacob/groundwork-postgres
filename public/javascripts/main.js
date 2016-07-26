@@ -4,11 +4,15 @@ requirejs.config({
 		'underscore' : '../node_modules/underscore/underscore-min',
 		'backbone' : '../node_modules/backbone/backbone',
 		'utils' : 'libs/utils',
-		'bowser' : '../node_modules/bowser/src/bowser'
+		'bowser' : '../node_modules/bowser/src/bowser',
+		'bootstrap' : '../stylesheets/_scss/_07-vendors/bootstrap/dist/js/bootstrap.min',
 	},
-	
-	shim: {
 
+	shim: {
+		'bootstrap' : {
+			deps: ['jquery'],
+			exports: 'Bootstrap'
+		}
 	}
 
 });
