@@ -1,0 +1,29 @@
+.relative {
+  position: relative;
+}
+
+.align-middle {
+  vertical-align: middle;
+}
+
+.inline-block {
+  display: inline-block;
+
+  &.align-middle {
+    float: none;
+  }
+}
+
+.cursor--pointer {
+  cursor: pointer;
+}
+.cursor--move {
+  cursor: move;
+}
+.cursor--progress {
+  cursor: progress;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}

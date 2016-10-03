@@ -24,21 +24,12 @@ var session = require('express-session');
 var passport = require('passport');
 var robots = require('robots.txt');
 
-/**
- *
- * TODO: Use process.env.DATABASE_URL connection string when knex fixes https://github.com/tgriesser/knex/issues/852
- */
+var pg = require('pg');
+pg.defaults.ssl = true;
+
 var knex = require('knex')({
 	client: 'pg',
-	connection: {
-		host: keys.db.host,
-		user: keys.db.username,
-		password: keys.db.password,
-		database: keys.db.database,
-		port: keys.db.port,
-		ssl: true
-	},
-	//debug: true
+	connection: keys.db.url
 });
 
 bookshelf = require('bookshelf')(knex);
@@ -52,7 +43,6 @@ var Utils = require('./libs/utils');
 
 // logging
 var winston = require('winston');
-
 
 // start the app
 var app = express();
@@ -151,6 +141,5 @@ app.use(function(err, req, res, next) {
     });
 
 });
-
 
 module.exports = app;

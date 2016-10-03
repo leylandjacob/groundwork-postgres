@@ -164,17 +164,28 @@ router.post('/forgot', userLib.requireNoLogin, function(req, res) {
 		// send email
 		function(user, token, callback) {
 
-			var link = (publicConfig.company.https ? 'https://' : 'http://') + publicConfig.company.domain + '/reset/' + token;
+			var link = (publicConfig.company.https ? 'https://' : 'http://') + publicConfig.company.domain + '/reset/' + token.token;
 
 			var emailObj = {
-				to: [{email: user.email}],
-				from_email: publicConfig.company.email.support,
-				from_name: publicConfig.company.appName,
-				subject: 'Password Reset for ' + publicConfig.company.appName,
-				html : '<a href="' + link + '">' + link + '</a>'
+				transmissionBody: {
+					"substitution_data": {
+						"link": link
+					},
+					"content": {
+						"template_id": "password-template",
+						"from": {
+							"name": publicConfig.company.appName,
+							"email": publicConfig.company.email.support
+						}
+					},
+					"subject": "Password Reset",
+					recipients: [
+						{address: user.email}
+					]
+				}
 			};
 
-			emailLib.send(emailObj, function(error, data) {
+			emailLib.send(emailObj, function(error, result){
 
 				if (error) {
 
@@ -182,9 +193,10 @@ router.post('/forgot', userLib.requireNoLogin, function(req, res) {
 
 				} else {
 
-					callback(null, data);
+					callback(null, result);
 
 				}
+
 			});
 
 		}

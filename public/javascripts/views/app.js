@@ -13,41 +13,40 @@ define([
 	
 ],	function($, _, Backbone, Utils, UserModel){
 	
+	'use strict';
 	
-		var AppView = Backbone.View.extend({
-			
-			// setup DOM Elements
-			el : $('body'),
-			
-			// bind Events
-			events: {
+	return Backbone.View.extend({
+		
+		// setup DOM Elements
+		el : $('body'),
+		
+		// bind Events
+		events: {
 
-			},
+		},
 
-			/**
-			 * initialize()
-             * @desc intialize the view
-			 *
-			 * @param options
-			 */
-			initialize: function(options){
+		/**
+		 * initialize()
+		 * @desc initialize the view
+		 *
+		 * @param options
+		 */
+		initialize: function(options){
 
-			},
+		},
+		
+		/**
+		 * render()
+		 * @desc Render the view
+		 * 
+		 * 
+		 */			
+		render: function(){
 			
-			/**
-             * render()
-			 * @desc Render the view
-			 * 
-			 * 
-			 */			
-			render: function(){
+			// No render
+			
+		}
 				
-				// No render
-				
-			}
-					
-		});
-				
-	return AppView;
-				
+	});
+						
 });

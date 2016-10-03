@@ -1,11 +1,21 @@
 extends layout
 
 block content
-	if PRODUCTION
-		//
-			TODO: ADD Production Error Page
-		h1 Error Page
-	else 
-		h1= message
-		h2= error.status
-		pre #{error.stack}
+	if config.production
+		.container.h-xs-100
+			.col-sm-12.v-center-xs
+				h1.font--lg-1
+					span.fa.fa-warning.text-danger
+					b  #{error.status}
+					|  Sorry. Something did not work properly.
+				.font--md-1 If you keep experiencing this issue please 
+					a(href='mailto:#{config.company.email.main}.io?subject=Error%20Page', title='Email Us') let us know
+					| .
+				hr
+				.text-muted
+					a(href="/", title="Home Page") Back to the home page.
+	else
+		.container.p-y-5
+			h1= message
+			h2= error.status
+			pre #{error.stack}

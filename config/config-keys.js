@@ -6,9 +6,11 @@
  */
 module.exports = {
 	
-	secret : process.env.APP_SECRET ? process.env.APP_SECRET : 'UFEqoNgHsA36tRcrxECYKRCJuLMoNLYe',
-	
+	secret : process.env.APP_SECRET ? process.env.APP_SECRET : '1234',
+	token : process.env.APP_SECRET ? process.env.APP_SECRET : '1234',
+
 	db:{
+		url: process.env.DATABASE_URL ? process.env.DATABASE_URL : '',
 		prefix: process.env.DATABASE_PREFIX ? process.env.DATABASE_PREFIX : '',
 		host: process.env.DATABASE_NAME ? process.env.DATABASE_HOST : '',
 		database: process.env.DATABASE_NAME ? process.env.DATABASE_NAME : '',
@@ -25,9 +27,9 @@ module.exports = {
 		apiKey: "",
 		appId: ""
 	},
-	
-	mandrill: {
-		apiKey: process.env.MANDRILL_API_KEY ? process.env.MANDRILL_API_KEY : 'pX6MzCZEJMCruuoEE2J2kA'
-	}
+
+	sparkpost: {
+		apiKey: '1234'
+	},
  
 };

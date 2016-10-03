@@ -1,11 +1,14 @@
 extends ../layout
 block content
-    .container
-        form(id="submit-reset" accept-charset="UTF-8" action="/reset/#{token}" method="POST" )
-            input(type="password" name="password" placeholder="new password")
-            input(type="password" name="password_confirm" placeholder="confirm password")
-            //
-                label
-                    input(class="trigger-show-password" type="checkbox" name="show_passwords")
-                    | Show passwords
-            button(class="trigger-submit-reset") Reset Password
+	.h-xs-100.container.text-xs-center
+			.v-center-xs.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
+				p.lead Forgot
+				form(id="submit-reset", accept-charset="UTF-8", action="/reset/#{token}", method="POST")
+					.form-group
+						label.sr-only(for='password' ) New Password
+						input(id="password", type="password", name="password", placeholder="new password")
+					.form-group
+						label.sr-only(for='password_confirm' ) Confirm New Password
+						input(id="password_confirm", type="password", name="password_confirm", placeholder="confirm password")
+					.form-group
+						button(class="trigger-submit-reset") Reset Password

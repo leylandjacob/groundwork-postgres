@@ -5,238 +5,260 @@
  */
 define([
 
-    'jquery',
-    'underscore',
-    'backbone',
-    'utils',
-    'models/user'
+	'jquery',
+	'underscore',
+	'backbone',
+	'utils',
+	'models/user'
 
 ],	function($, _, Backbone, Utils, UserModel){
 
+	'use strict';
+	
+	return Backbone.View.extend({
 
-    var AuthView = Backbone.View.extend({
+		// setup DOM Elements
+		el : $('body'),
 
-        // setup DOM Elements
-        el : $('body'),
+		// bind Events
+		events: {
+			'click .trigger-signup' : 'signup',
+			'click .trigger-login' : 'login',
+			'click .trigger-request-reset' : 'requestReset',
+			'click .trigger-submit-reset' : 'submitReset'
+		},
 
-        // bind Events
-        events: {
-            'click .trigger-signup' : 'signup',
-            'click .trigger-login' : 'login',
-            'click .trigger-request-reset' : 'requestReset',
-            'click .trigger-submit-reset' : 'submitReset',
-        },
+		/**
+		 * initialize()
+		 * @desc intialize the view
+		 *
+		 *
+		 */
+		initialize: function(){
 
-        /**
-         * initialize()
-         * @desc intialize the view
-         *
-         *
-         */
-        initialize: function(){
+		},
 
-        },
+		/**
+		 * render()
+		 * @desc Render the view
+		 *
+		 *
+		 */
+		render: function(){
 
-        /**
-         * render()
-         * @desc Render the view
-         *
-         *
-         */
-        render: function(){
+		},
 
-        },
+		/**
+		 * signup()
+		 *
+		 *
+		 * @param event
+		 */
+		signup: function(event) {
 
-        /**
-         * signup()
-         *
-         *
-         * @param event
-         */
-        signup: function(event) {
+			event.preventDefault();
+			
+			var $button = $(event.currentTarget);
 
-            event.preventDefault();
+			var $email = $('input[name="email"]');
+			var $password = $('input[name="password"]');
+			var messages = Utils.getConfig().messages;
+			
+			var email = $email.val().toLowerCase();
+			var password = $password.val();
 
-            var $email = $('input[name="email"]');
-            var $password = $('input[name="password"]');
-            var messages = Utils.getConfig().messages;
-            
-            var email = $email.val().toLowerCase();
-            var password = $password.val();
+			// email required
+			if(!email){
+				Utils.alert( messages.requiredEmail );
+				$email.focus()
+				return;
+			}
 
-            // email required
-            if(!email){
-                Utils.alert( messages.requiredEmail );
-                $email.focus()
-                return;
-            }
+			// valid email required
+			if(!Utils.validateEmail(email)){
+				Utils.alert( messages.invalidEmail );
+				$email.focus();
+				return;
+			}
 
-            // valid email required
-            if(!Utils.validateEmail(email)){
-                Utils.alert( messages.invalidEmail );
-                $email.focus()
-                return;
-            }
+			// valid password strength
+			if( !Utils.validatePassword( password ) ){
+				$password.focus();
+				return;
+			}
 
-            // valid password strength
-            if( !Utils.validatePassword( password ) ){
-                $password.focus();
-                return;
-            }
+			this.user = new UserModel();
+			
+			Utils.buttonLoading($button);
 
-            this.user = new UserModel();
+			this.user.save( { email : email, password: password } , {
+				success: function(model, response, options) {
 
-            this.user.save( { email : email, password: password } , {
-                success: function(model, response, options) {
+					Utils.buttonReset($button);
+					
+					if(response.status === 'error'){
 
-                    if(response.status === 'error'){
+						Utils.alert(response.message);
+						return;
+					}
 
-                        Utils.alert(response.message);
-                        return;
-                    }
+					window.location = "/";
 
-                    window.location = "/";
+				}
+			});
+		},
 
-                },
+		/**
+		 * login()
+		 *
+		 *
+		 * @param event
+		 */
+		login: function(event) {
 
-                error: function(model, response, options) {
+			event.preventDefault();
 
-                    Utils.alert( messages.signupError );
+			var $button = $(event.currentTarget);
 
-                }
-            });
-        },
+			var form = $('#login');
 
-        /**
-         * login()
-         *
-         *
-         * @param event
-         */
-        login: function(event) {
+			var redirect = form.attr('data-redirect') ? form.attr('data-redirect') : '/';
 
-            event.preventDefault();
+			var $email = $('input[name="email"]');
+			var $password = $('input[name="password"]');
+			var messages = Utils.getConfig().messages;
 
-            var form = $('#login');
+			var email = $email.val().toLowerCase();
+			var password = $password.val();
 
-            var redirect = form.attr('data-redirect') ? form.attr('data-redirect') : '/';
+			// email required
+			if(!email){
+				Utils.alert( messages.requiredEmail );
+				$email.focus();
+				return;
+			}
 
-            var $email = $('input[name="email"]');
-            var $password = $('input[name="password"]');
-            var messages = Utils.getConfig().messages;
+			// password required
+			if(!password){
+				Utils.alert( messages.requiredPassword );
+				$password.focus();
+				return;
+			}
 
-            var email = $email.val().toLowerCase();
-            var password = $password.val();
+			Utils.buttonLoading($button);
+			
+			$.post(form.attr('action'), form.serialize(), function(response) {
+				
+				Utils.buttonReset($button);
+				
+				if(response.status === 'error') {
+					Utils.alert(response.message);
+				} else {
+					window.location = redirect;
+				}
 
-            // email required
-            if(!email){
-                Utils.alert( messages.requiredEmail );
-                $email.focus();
-                return;
-            }
-
-            // password required
-            if(!password){
-                Utils.alert( messages.requiredPassword );
-                $password.focus();
-                return;
-            }
-
-            $.post(form.attr('action'), form.serialize(), function(response) {
-                if(response.status === 'error') {
-                    Utils.alert(response.message);
-                } else {
-                    window.location = redirect;
-                }
-
-            }, 'json');
-            return false;
-        },
+			}, 'json');
+			
+			return false;
+			
+		},
 
 		/**
 		 * 
-         * requestReset
-         * 
-         * @param event
-         * @returns {boolean}
-         */
-        requestReset: function(event) {
+		 * requestReset
+		 * 
+		 * @param event
+		 * @returns {boolean}
+		 */
+		requestReset: function(event) {
 
-            event.preventDefault();
+			event.preventDefault();
 
-            var form = $('#request-reset');
+			var $button = $(event.currentTarget);
 
-            var email = $('input[name="email"]').val();
+			var form = $('#request-reset');
 
-            var messages = Utils.getConfig().messages;
+			var email = $('input[name="email"]').val();
 
-            // email required
-            if(!email){
-                Utils.alert(messages.requiredEmail);
-                return;
-            }
+			var messages = Utils.getConfig().messages;
 
-            if(!Utils.validateEmail(email)){
-                Utils.alert(messages.invalidEmail);
-                return;
-            }
+			// email required
+			if(!email){
+				Utils.alert(messages.requiredEmail);
+				return;
+			}
 
-            $.post(form.attr('action'), form.serialize(), function(response) {
+			if(!Utils.validateEmail(email)){
+				Utils.alert(messages.invalidEmail);
+				return;
+			}
 
-                if(response.status === 'error') {
+			Utils.buttonLoading($button);
 
-                    Utils.alert(response.message);
+			$.post(form.attr('action'), form.serialize(), function(response) {
 
-                } else {
+				Utils.buttonReset($button);
+				
+				if(response.status === 'error') {
 
-                    Utils.alert(messages.resetSuccess);
+					Utils.alert(response.message);
 
-                }
+				} else {
 
-            }, 'json');
-            return false;
+					Utils.alert(messages.resetSuccess);
 
-        },
+				}
+
+			}, 'json');
+			
+			return false;
+
+		},
 
 		/**
 		 *
-         * submitReset
-         * 
-         * @param event
-         * @returns {boolean}
-         */
-        submitReset: function(event) {
+		 * submitReset
+		 * 
+		 * @param event
+		 * @returns {boolean}
+		 */
+		submitReset: function(event) {
 
-            event.preventDefault();
+			event.preventDefault();
 
-            var form = $('#submit-reset');
-            var password = $('input[name="password"]').val();
-            var passwordConfirm = $('input[name="password_confirm"]').val();
+			var $button = $(event.currentTarget);
 
-            if( !Utils.validatePassword(password, passwordConfirm) ){
-                return;
-            }
+			var form = $('#submit-reset');
+			var password = $('input[name="password"]').val();
+			var passwordConfirm = $('input[name="password_confirm"]').val();
 
-            $.post(form.attr('action'), form.serialize(), function(response) {
+			if( !Utils.validatePassword(password, passwordConfirm) ){
+				return;
+			}
 
-                if(response.status === 'error') {
+			Utils.buttonLoading($button);
 
-                    Utils.alert(response.message);
+			$.post(form.attr('action'), form.serialize(), function(response) {
 
-                } else {
+				Utils.buttonReset($button);
+				
+				if(response.status === 'error') {
 
-                    window.location = "/";
+					Utils.alert(response.message);
 
-                }
+				} else {
 
-            }, 'json');
-            return false;
+					window.location = "/";
 
-        },
+				}
+
+			}, 'json');
+			
+			return false;
+
+		},
 
 
-    });
-
-    return AuthView;
+	});
 
 });

@@ -1,10 +1,13 @@
 define([
-  'underscore',
-  'backbone'
+	'underscore',
+	'backbone', 
+	'utils'
   
-], function(_, Backbone){
+], function(_, Backbone, Utils){
+	
+	'use strict';
 
-	var UserModel = Backbone.Model.extend({
+	return Backbone.Model.extend({
 		
 		urlRoot : '/api/users/',
 		
@@ -30,11 +33,22 @@ define([
 		 *
 		 */
 		initialize: function(){
+			this.on('error', this.errorHandler);
+		},
+
+		/**
+		 *
+		 * errorHandler()
+		 *
+		 * Catch all api errors that are not 200
+		 *
+		 */
+		errorHandler: function(){
+
+			Utils.alert(Utils.getConfig().messages.generalError);
 
 		}
 	
 	});
-
-	return UserModel;
-
+	
 });

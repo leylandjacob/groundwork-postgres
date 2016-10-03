@@ -1,7 +1,7 @@
 extends ../layout
 block content
-    .p-y-15.container.text-xs-center
-        .col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
+    .h-xs-100.container.text-xs-center
+        .v-center-xs.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
             p.lead Sign Up
             form(id="signup", action="/signup", method="POST", data-redirect=redirect ? redirect : '/')
                 .form-group
@@ -14,5 +14,6 @@ block content
                     button.trigger-signup.btn.btn-primary.btn-loading.btn-block(type="submit",)
                         span.btn-loading-text Sign Up
             br
-            small Already have an account? 
+            .font--sm-1 
+                | Already have an account? 
                 a(href="/login", title="Log In") Log In

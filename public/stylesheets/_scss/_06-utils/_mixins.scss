@@ -1,6 +1,4 @@
-// ------------------------------------------------------------
-// Neat grid using Omega Reset
-// ------------------------------------------------------------
+
 // Color util classes
 @mixin color($class-extension, $color){
 
@@ -23,15 +21,13 @@
     &:focus {
       color: darken($color, 10%);
     }
-    &:visited {
-      color: darken($color, 10%);
-    }
     &:active {
       color: darken($color, 10%);
     }
   }
 }
 
+// padding classes
 @mixin padding($size, $value){
   .p-t-#{$size} {
     padding-top: $value;
@@ -55,6 +51,7 @@
   }
 }
 
+// margin classes
 @mixin margin($size, $value){
   .m-t-#{$size} {
     margin-top: $value;
@@ -78,6 +75,7 @@
   }
 }
 
+// position classes
 @mixin el($size, $value){
   .el-t-#{$size} {
     @extend .el;
@@ -94,5 +92,43 @@
   .el-l-#{$size} {
     @extend .el;
     left: $value;
+  }
+}
+
+// unitless function to convert px to em
+@function em($pixels, $context: $browser-context) {
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+  @return $pixels / $context * 1em;
+}
+
+// breakpoint mixin
+@mixin breakpoint($mq01: 0, $mq2: false, $maxmin: max-width) {
+  @if $mq2 == false {
+    @media ($maxmin: $mq01) {
+      @content;
+    }
+  }
+  @else {
+    @media (min-width: $mq01) and (max-width: $mq2) {
+      @content;
+    }
+  }
+}
+
+// responsive font size mixin
+@mixin font-size-map($font-size-map) {
+  @each $breakpoint, $font-size in $font-size-map {
+    @if $breakpoint == null {
+      font-size: em($font-size);
+    } @else {
+      @include breakpoint($breakpoint) {
+        font-size: em($font-size);
+      }
+    }
   }
 }

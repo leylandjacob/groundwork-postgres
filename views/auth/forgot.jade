@@ -1,7 +1,14 @@
 extends ../layout
 block content
-    .container
-        form(id="request-reset" accept-charset="UTF-8" action="/forgot" method="POST")
-            input(type="email" name="email" class="email" placeholder="email")
-            button(class="trigger-request-reset") Send Reset Email
-            a(href="/login" title="Login") Login
+	.h-xs-100.container.text-xs-center
+		.v-center-xs.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
+			p.lead Request Password Reset
+			form(id="request-reset", accept-charset="UTF-8", action="/forgot", method="POST")
+				.form-group
+					label.sr-only( for='email' ) Email Address
+					input.form-control(type='email', id='email', name="email", placeholder='email address')
+				.form-group
+					button.trigger-request-reset.btn.btn-primary.btn-loading.btn-block(type="submit",)
+						span.btn-loading-text Send Reset Email
+				.font--sm-1
+					a(href="/login", title="Login") Login

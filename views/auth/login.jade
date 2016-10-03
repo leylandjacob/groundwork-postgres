@@ -1,7 +1,7 @@
 extends ../layout
 block content
-	.p-y-15.container.text-xs-center
-		.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
+	.h-xs-100.container.text-xs-center
+		.v-center-xs.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
 			p.lead Log In
 			form(id="login", action="/login", method="POST", data-redirect=redirect ? redirect : '/')
 				.form-group
@@ -16,5 +16,6 @@ block content
 			//
 				small: a(href="/forgot", title="Forgot Password") Forgot Password?
 			br
-			small Don't have an account? 
+			.font--sm-1 
+				| Don't have an account? 
 				a(href="/signup", title="Sign Up") Sign Up

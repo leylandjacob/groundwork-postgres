@@ -37,5 +37,13 @@ router.get('/',  function(req, res) {
 	
 });
 
+router.get('/styles',  function(req, res) {
+
+	'use strict';
+
+	res.render('styles');
+
+});
+
 
 module.exports = router;
