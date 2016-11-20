@@ -3,7 +3,7 @@ body, html {
 }
 
 .font-serif{
-  font-family: $base-sans-font;
+  font-family: $base-serif-font;
 }
 
 .font-weight--100 {
@@ -72,31 +72,30 @@ h1,h2,h3,h4,h5,h6 {
 
 
 // breakpoint variables
-$lg: $screen-lg;
-$md: $screen-md;
-$sm: $screen-sm;
-$xs: $screen-xs;
+$lg: map-get($grid-breakpoints, lg);
+$md: map-get($grid-breakpoints, md);
+$sm: map-get($grid-breakpoints, sm);
 
 // body font size
 $browser-context: 16;
 
 // typography scale
-$body-font-size: (null: 16, $md: 15, $sm: 14, $xs: 13);
-$h1-font-size: (null: 72, $md: 60, $sm: 54, $xs: 48);
-$h2-font-size: (null: 60, $md: 54, $sm: 48, $xs: 42);
-$h3-font-size: (null: 54, $md: 48, $sm: 42, $xs: 36);
-$h4-font-size: (null: 48, $md: 42, $sm: 36, $xs: 32);
-$h5-font-size: (null: 42, $md: 36, $sm: 32, $xs: 26);
-$h6-font-size: (null: 36, $md: 32, $sm: 26, $xs: 22);
+$body-font-size: (null: 16, $lg: 15, $md: 14, $sm: 14);
+$h1-font-size: (null: 72, $lg: 60, $md: 54, $sm: 48);
+$h2-font-size: (null: 60, $lg: 54, $md: 48, $sm: 42);
+$h3-font-size: (null: 54, $lg: 48, $md: 42, $sm: 36);
+$h4-font-size: (null: 48, $lg: 42, $md: 36, $sm: 32);
+$h5-font-size: (null: 42, $lg: 36, $md: 32, $sm: 26);
+$h6-font-size: (null: 36, $lg: 32, $md: 26, $sm: 22);
 
-$font-sm-1: (null: 12, $md: 11, $sm: 10, $xs: 9);
-$font-sm-2: (null: 14, $md: 13, $sm: 12, $xs: 11);
-$font-md-1: (null: 22, $md: 20, $sm: 18, $xs: 18);
-$font-md-2: (null: 26, $md: 24, $sm: 22, $xs: 22);
-$font-lg-1: (null: 36, $md: 33, $sm: 30, $xs: 30);
-$font-lg-2: (null: 48, $md: 44, $sm: 40, $xs: 38);
-$font-xl-1: (null: 80, $md: 72, $sm: 64, $xs: 46);
-$font-xl-2: (null: 98, $md: 90, $sm: 82, $xs: 74);
+$font-sm-1: (null: 12, $lg: 11, $md: 10, $sm: 9);
+$font-sm-2: (null: 14, $lg: 13, $md: 12, $sm: 11);
+$font-md-1: (null: 22, $lg: 20, $md: 18, $sm: 18);
+$font-md-2: (null: 26, $lg: 24, $md: 22, $sm: 22);
+$font-lg-1: (null: 36, $lg: 33, $md: 30, $sm: 30);
+$font-lg-2: (null: 48, $lg: 44, $md: 40, $sm: 38);
+$font-xl-1: (null: 80, $lg: 72, $md: 64, $sm: 46);
+$font-xl-2: (null: 98, $lg: 90, $md: 82, $sm: 74);
 
 
 body, html {

@@ -1,7 +1,7 @@
 extends ../layout
 block content
     .h-xs-100.container.text-xs-center
-        .v-center-xs.col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4
+        .v-center-xs.col-xs-12.col-sm-8.offset-sm-2.col-md-6.offset-md-3.col-lg-4.offset-lg-4
             p.lead Sign Up
             form(id="signup", action="/signup", method="POST", data-redirect=redirect ? redirect : '/')
                 .form-group
