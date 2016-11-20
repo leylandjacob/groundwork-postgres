@@ -328,7 +328,7 @@ router.post('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 
 			} else {
 
-				var user = new UserModel({id : token.get('user')});
+				var user = new UserModel({id : token.get('user_id')});
 				user.fetch().then(function( user ) {
 
 					if ( !user ) {
@@ -347,7 +347,7 @@ router.post('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 									return res.jerror('Bad Request', messages.loginError);
 								}
 
-								token.set({active: false, used : 1});
+								token.set({active: false});
 
 								token.save().then(function() {
 									res.jsend();

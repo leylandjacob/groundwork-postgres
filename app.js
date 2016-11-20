@@ -38,6 +38,7 @@ bookshelf.plugin('pagination');
 
 var publicConfig = require('./config/config-app-public');
 var appLib = require('./libs/app');
+var authLib = require('./libs/auth');
 var Utils = require('./libs/utils');
 
 

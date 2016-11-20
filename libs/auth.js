@@ -28,9 +28,10 @@ passport.deserializeUser(function(id, done) {
 	'use strict';
 	new UserModel({ id : id }).fetch().then(function(user) {
 		if(user){
-			user.toJSON();
+			done(null, user.toJSON());
+		} else {
+			done(null, user);
 		}
-		done(null, user);
 	});
 });
 
