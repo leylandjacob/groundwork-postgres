@@ -18,19 +18,20 @@ define([
 			'reset/:token' 	: 'auth',
 			'forgot' 		: 'auth'
 		}
+		
 	});
 	
 	var initialize = function(){
 	
 		var router = new AppRouter();
-
+		
 		/**
 		 * Home/App View
 		 */
 		router.on('route:home', function(){
 			require(['views/app'], function (View) { var view = new View() ;});
 		});
-
+		
 		/**
 		 * Auth View
 		 */
@@ -46,14 +47,12 @@ define([
 
 		// check alerts and reset
 		Utils.resetAlert(5000);
+		
+		return router;
 	
 	};
 	
-	return {
-		
-		initialize : initialize
-		
-	};
+	return initialize();
 	
 });
 
