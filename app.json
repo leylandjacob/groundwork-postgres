@@ -22,10 +22,13 @@
 	  "value": ""
 	},
 	"ERROR_PAGE_URL": {
-	  "value": "http://"
+	  "value": "http://www.herokucdn.com/error-pages/application-error.html"
 	},
 	"MAINTENANCE_PAGE_URL" : {
-	  "value": "http://"
+	  "value": "http://www.herokucdn.com/error-pages/maintenance-mode.html"
+	},
+	"NEW_RELIC_APP_NAME" : {
+	  "value": ""
 	}
   },
   "addons": [
