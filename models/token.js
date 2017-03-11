@@ -1,43 +1,43 @@
 /**
- * File Name : models/tokens.js
- * Description: Token Model
+ * @file models/tokens.js
+ * @desc User Model
  *
- * Notes:
+ * @notes
  *
  */
 
 var shortid = require('shortid'),
 	configKeys = require('../config/config-keys');
 
-var Token = bookshelf.Model.extend({
+module.exports = bookshelf.model( 'Token', {
 
 	tableName: configKeys.db.prefix + 'tokens',
 	idAttribute: 'id',
 	hasTimestamps: true,
 	
 	initialize: function(){
-
+		
 		'use strict';
-
 		this.on('saving', this.beforeSave);
-
+		this.on('creating', this.beforeCreate);
 	},
 
 	/**
 	 *
-	 * beforeSave
+	 * @desc action to run before creating
+	 *
+	 */
+	beforeCreate: function() {
+		'use strict';
+		this.set({id : shortid.generate()});
+	},
+	
+	/**
+	 *
+	 * @desc action to run before saving
 	 *
 	 */
 	beforeSave: function() {
-
 		'use strict';
-
-		// sets the ID of a new model
-		if(this.isNew()){
-			this.set({id : shortid.generate()});
-		}
-
 	}
 });
-
-module.exports = Token;

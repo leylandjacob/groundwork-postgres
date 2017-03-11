@@ -6,7 +6,9 @@
     "backbone": "*",
     "bowser": "*",
     "jquery": "2.2.4",
+    "requirejs-text": "^2.0.15",
     "tether": "1.2.0",
-    "underscore": "*"
+    "underscore": "*",
+    "moment": "*"
   }
 }

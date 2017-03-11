@@ -33,8 +33,7 @@ server.on('listening', onListening);
  *  Log all uncaught exceptions
  */
 process.on('uncaughtException', function (error) {
-  var winston = require('winston');
-  winston.error(error);
+  console.error(error);
 });
 
 /**

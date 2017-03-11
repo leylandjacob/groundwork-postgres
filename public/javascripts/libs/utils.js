@@ -15,11 +15,8 @@ define([
 	return {
 
 		/**
-		 * getConfig() get the site config
-		 *
-		 *
+		 * @desc get the site config
 		 * @return {Object} returns the config or null
-		 *
 		 */
 		getConfig: function() {
 			if (config) { //should loaded as a global on the page
@@ -29,26 +26,19 @@ define([
 		},
 
 		/**
-		 * Looks up bootstrapped data
+		 * @desc Looks up bootstrapped data
 		 * @param  {String} name
 		 * @return {Object}
 		 */
 		getData: function(name) {
-			if (!name){
-				return data;
-			}
-			if (data) {
-				return (data[name] ? data[name] : null);
-			}
+			if (!name){ return data; }
+			if (data) { return (data[name] ? data[name] : null); }
 			return null;
 		},
 
 		/**
-		 * guid() generates a guid id
-		 *
-		 *
+		 * @desc generates a guid id
 		 * @return {String} returns a guid string
-		 *
 		 */
 		guid: function() {
 			return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
@@ -56,11 +46,8 @@ define([
 		},
 
 		/**
-		 * s4() generates a random number
-		 *
-		 *
+		 * @desc generates a random number
 		 * @return {String} returns a random number
-		 *
 		 */
 		s4: function() {
 			return Math.floor((1 + Math.random()) * 0x10000)
@@ -69,37 +56,31 @@ define([
 		},
 
 		/**
-		 * getFileExt() get a file extension name
-		 *
+		 * @desc get a file extension name
 		 * @param {String} filename
 		 * @return {String} returns the extension name
-		 *
 		 */
 		getFileExt: function(filename) {
 			return filename.split('.').pop();
 		},
 
 		/**
-		 * getUniqueName() get a unique file name
-		 *
+		 * @desc get a unique file name
 		 * @param {String} filename
 		 * @return {String} returns guid + file extension
-		 *
 		 */
 		getUniqueName: function(fileName) {
 			return Utils.guid() + '.' + Utils.getFileExt(fileName);
 		},
 
 		/**
-		 * getImagePath() get the full path to an image
-		 *
+		 * @desc get the full path to an image
 		 * @param {String} image
 		 * @param {String} folder (optional)
-		 *
 		 * @return {Object} returns full path to image on
-		 *
 		 */
 		getImagePath: function(image, folder) {
+			
 			var config = Utils.getConfig();
 
 			if (folder != '') {
@@ -114,12 +95,9 @@ define([
 		},
 
 		/**
-		 * getQueryVariable() get a query variable form
-		 * the current window URL
-		 *
+		 * @desc get a query variable form the current window URL
 		 * @param {String} variable
 		 * @return {String} returns the key or null
-		 *
 		 */
 		getQueryVariable: function(variable) {
 			var query = window.location.search.substring(1);
@@ -134,44 +112,19 @@ define([
 		},
 
 		/**
-		 * getIdFromUrl() get the id from
-		 * the current window URL
-		 *
+		 * @desc get the id from the current window URL
 		 * @return {String} returns the id
-		 *
 		 */
 		getIdFromUrl: function() {
 			return window.location.pathname.split('/').slice(-1).pop();
 		},
+		
 
 		/**
-		 * getFormData() get a forms data
-		 *
-		 *
-		 * @return {String} id (name of the form to get data from)
-		 *
-		 */
-		getFormData: function(id) {
-
-			var $inputs = $('#' + id + ' :input');
-
-			var values = {};
-			$inputs.each(function() {
-
-				values[this.name] = $(this).val();
-
-			});
-
-			return values;
-		},
-
-		/**
-		 * validateEmail() validate an email address
+		 * @desc validate an email address
 		 *
 		 * @param {String} email
-		 *
 		 * @return {Boolean} returns true if valid
-		 *
 		 */
 		validateEmail: function(email) {
 			var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -179,19 +132,17 @@ define([
 		},
 
 		/**
-		 *
-		 * validatePasswordLength() validate password length
+		 * @desc validate password length
 		 *
 		 * @param password
 		 * @return {Boolean} returns true if valid
 		 */
 		validatePasswordLength: function(password){
-			return password.length > 6;
+			return password.length > 4;
 		},
 
 		/**
-		 *
-		 * validatePasswordLength() validate password length
+		 * @desc validate password length
 		 *
 		 * @param password
 		 * @return {Boolean} returns true if valid
@@ -202,8 +153,7 @@ define([
 		},
 
 		/**
-		 *
-		 * validatePasswordLowercaseCharacter() validate password lowercase character
+		 * @desc validate password lowercase character
 		 *
 		 * @param password
 		 * @return {Boolean} returns true if valid
@@ -214,8 +164,7 @@ define([
 		},
 
 		/**
-		 *
-		 * validatePasswordUppercaseCharacter() validate password uppercase character
+		 * @desc validate password uppercase character
 		 *
 		 * @param password
 		 * @return {Boolean} returns true if valid
@@ -226,8 +175,7 @@ define([
 		},
 
 		/**
-		 *
-		 * validatePasswordSpecialCharacter() validate password special character
+		 * @desc validate password special character
 		 *
 		 * @param password
 		 * @return {Boolean} returns true if valid
@@ -238,8 +186,7 @@ define([
 		},
 
 		/**
-		 *
-		 * validatePassword() check validation and return message
+		 * @desc check validation and return message
 		 *
 		 * @param password
 		 * @param passwordConfirm
@@ -295,10 +242,9 @@ define([
 
 
 		/**
-		 * alert() shows an alert
+		 * @desc shows an alert
 		 *
 		 * @param {Object} obj from Messages or custom
-		 *
 		 *
 		 */
 		alert: function(obj){
@@ -321,9 +267,9 @@ define([
 		},
 
 		/**
-		 * resetAlert() clears the last alert
+		 * @desc clears the last alert
 		 *
-		 *
+		 * @param delay
 		 *
 		 */
 		resetAlert: function(delay){
@@ -334,28 +280,30 @@ define([
 
 				setTimeout(function(){
 					$('.alerts li:last-child').remove();
-				}, 400)
+				}, 400);
 
 			}, delay ? delay : 3000);
 		},
 
 		/**
-		 * buttonLoading
+		 * @desc show loading button state
 		 *
 		 * @param $button
 		 */
 		buttonLoading: function($button) {
+			if(!$button){return;}
 			$button.addClass('disabled loading');
 			$button.attr('disabled', true);
 			$('body').addClass('loading');
 		},
 
 		/**
-		 * buttonReset
+		 * @desc remove loading button state
 		 *
 		 * @param $button
 		 */
 		buttonReset: function($button) {
+			if(!$button){return;}
 			$button.removeClass('disabled loading');
 			$button.attr('disabled', false);
 			$('body').removeClass('loading');
@@ -363,30 +311,19 @@ define([
 		},
 
 		/**
-		 * checkBrowser() Checks the browser for old versions and displays a message
-		 *
-		 *
-		 *
+		 * @desc Checks the browser for old versions and displays a message
 		 */
 		checkBrowser: function(){
 
 			var oldBrowser = false;
 
-			if(bowser.firefox && bowser.version < 16){
-				oldBrowser = true;
-			}
+			if(bowser.firefox && bowser.version < 16){ oldBrowser = true; }
 
-			if(bowser.chrome && bowser.version < 26){
-				oldBrowser = true;
-			}
+			if(bowser.chrome && bowser.version < 26){ oldBrowser = true; }
 
-			if(bowser.msie && bowser.version < 10){
-				oldBrowser = true;
-			}
+			if(bowser.msie && bowser.version < 10){ oldBrowser = true; }
 
-			if(bowser.safari && bowser.version < 6.1){
-				oldBrowser = true;
-			}
+			if(bowser.safari && bowser.version < 6.1){ oldBrowser = true; }
 
 			if(oldBrowser){
 				$('.upgrade-browser').addClass('old-browser');
@@ -395,7 +332,7 @@ define([
 		},
 
 		/**
-		 * trackUser() Checks the browser for old versions and displays a message
+		 * @desc used with segment.io to push analytics tracking events
 		 *
 		 * @param {String} tracking_event (name of the event to track)
 		 * @param {Object} data (all the data!)
@@ -405,7 +342,7 @@ define([
 			data.date_created = Date.now();
 			analytics.track(tracking_event, data);
 		}
-
+		
 	};
-				
+	
 });

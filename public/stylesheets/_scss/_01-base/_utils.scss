@@ -6,14 +6,6 @@
   vertical-align: middle;
 }
 
-.inline-block {
-  display: inline-block;
-
-  &.align-middle {
-    float: none;
-  }
-}
-
 .cursor--pointer {
   cursor: pointer;
 }
@@ -26,4 +18,10 @@
 
 .overflow-scroll {
   overflow: scroll;
+}
+
+.bg-img-cover {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }

@@ -9,9 +9,8 @@ define([
 	'underscore',
 	'backbone',
 	'utils',
-	'models/user'
 	
-],	function($, _, Backbone, Utils, UserModel){
+],	function($, _, Backbone, Utils){
 	
 	'use strict';
 	
@@ -26,7 +25,6 @@ define([
 		},
 
 		/**
-		 * initialize()
 		 * @desc initialize the view
 		 *
 		 * @param options
@@ -36,9 +34,7 @@ define([
 		},
 		
 		/**
-		 * render()
 		 * @desc Render the view
-		 * 
 		 * 
 		 */			
 		render: function(){

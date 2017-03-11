@@ -1,8 +1,3 @@
-/**
- * @desc Client Side Router
- * 
- *
- */
 define([
 
 	'jquery',
@@ -12,58 +7,48 @@ define([
 	
 ],	function($, _, Backbone, Utils){
 	
-		var AppRouter = Backbone.Router.extend({
-		
-			routes: {
-				
-				''			: 'home',
+	'use strict';
+	
+	var AppRouter = Backbone.Router.extend({
+	
+		routes: {
+			''				: 'home',
+			'login' 		: 'auth',
+			'signup' 		: 'auth',
+			'reset/:token' 	: 'auth',
+			'forgot' 		: 'auth'
+		}
+	});
+	
+	var initialize = function(){
+	
+		var router = new AppRouter();
 
-				// auth routes
-				'login' 		: 'auth',
-				'signup' 		: 'auth',
-				'reset/:token' 	: 'auth',
-				'forgot' 		: 'auth'
-					 				 				 				 
-			}
+		/**
+		 * Home/App View
+		 */
+		router.on('route:home', function(){
+			require(['views/app'], function (View) { var view = new View() ;});
+		});
+
+		/**
+		 * Auth View
+		 */
+		router.on('route:auth', function(){
+			require(['views/auth'], function (View) { var view = new View(); });
 		});
 		
-		var initialize = function(){
+		// start history
+		Backbone.history.start({pushState: true});
 		
-			var router = new AppRouter;
+		// check browser
+		Utils.checkBrowser();
 
-            /**
-             * Home/App View
-             */
-			router.on('route:home', function(){
-			
-				require(['views/app'], function (AppView) {    
-					var appView = new AppView();
-				});
-			
-			});
-
-            /**
-             * Auth View
-             */
-			router.on('route:auth', function(){
-
-				require(['views/auth'], function (AuthView) {
-					var authView = new AuthView();
-				});
-
-			});
-						
-			// start history
-			Backbone.history.start({pushState: true});
-			
-			// check browser
-			Utils.checkBrowser();
-
-			// check alerts and reset
-			Utils.resetAlert(5000);
-		
-		};
-		
+		// check alerts and reset
+		Utils.resetAlert(5000);
+	
+	};
+	
 	return {
 		
 		initialize : initialize

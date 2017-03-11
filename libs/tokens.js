@@ -1,22 +1,27 @@
 /**
- * File Name : libs/token.js
- * Description: Token Library
+ * @file libs/token.js
+ * @desc Token Library
  *
- * Notes:
+ * @notes
  *
  */
 
 // required modules
-var keys = require('../config/config-keys');
 var Utils = require('../libs/utils');
 
 // models
 var TokenModel = require('../models/token');
 
-
 module.exports = {
 
-	generatePasswordToken: function(userId, callback){
+	/**
+	 * 
+	 * @desc generate a password token
+	 * 
+	 * @param userId
+	 * @returns {*}
+	 */
+	generatePasswordToken: function(userId){
 		
 		'use strict';
 		
@@ -24,18 +29,13 @@ module.exports = {
 		var tomorrow = new Date();
 		tomorrow.setDate(tomorrow.getDate() + 1);
 
-		var tokenModel = new TokenModel({
+		return new TokenModel({
 			token: token,
 			active: true,
 			expires_at : tomorrow,
 			user : userId
-		});
-
-		tokenModel.save().then(function (token) {
-			 callback(null, token.toJSON());
-		}).catch(function(error) {
-			callback(error.message, null);
-		});
+		}).save();
+		
 	}
 
 };

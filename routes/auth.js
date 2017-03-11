@@ -1,8 +1,8 @@
 /**
- * File Name : routes/auth.js 
- * Description: Authentication routes
+ * @file routes/auth.js 
+ * @desc Authentication routes
  *
- * Notes: 
+ * @notes
  * 
  */
 
@@ -10,8 +10,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var async = require('async');
-var winston = require('winston');
+var Promise = require("bluebird");
 
 // libs
 var userLib = require('../libs/user');
@@ -19,32 +18,31 @@ var tokenLib = require('../libs/tokens');
 var emailLib = require('../libs/email');
 var messages = require('../config/config-messages');
 var publicConfig = require('../config/config-app-public');
-require('express-jsend');
 
 // models
 var UserModel = require('../models/user');
 var TokenModel = require('../models/token');
 
 /**
- * Route: /login
- * Method: GET
+ * @route /login
+ * @method GET
  *
- * Description: login
- *
+ * @desc login
  *
  */
 router.get('/login', userLib.requireNoLogin,  function(req, res) {
 	
 	'use strict';
+	console.log('LOGIN')
 	res.render('auth/login');
+	
 });
 
 /**
- * Route: /login
- * Method: POST
+ * @route /login
+ * @method POST
  *
- * Description: Log user in
- *
+ * @desc Log a user in
  *
  */
 router.post('/login', function(req, res, next) {
@@ -53,21 +51,15 @@ router.post('/login', function(req, res, next) {
 	
 	passport.authenticate('local', function(error, user, info) {
 
-		if (error || info && info.message === 'Missing credentials') {
-			return res.jerror('Bad Request', error);
-		}
-
-		if (!user) {
-			return res.jerror('No User', info);
-		}
+		if ( error ) { res.status(400); return res.jsend.error( error ); }
+		if ( info ) { res.status(400); return res.jsend.fail( info ); }
+		if ( !user ) { return res.jsend.fail({message: 'We were not able to look up a valid user.'}); }
 
 		req.login(user, function(error) {
 
-			if (error) {
-				return res.jerror('Bad Request', messages.loginError);
-			}
-
-			return res.jsend();
+			if (error) { res.status(400); return res.jsend.error( error ); }
+			
+			return res.jsend.success(user);
 
 		});
 
@@ -77,27 +69,24 @@ router.post('/login', function(req, res, next) {
 
 
 /**
- * Route: /signup
- * Method: GET
+ * @route /signup
+ * @method GET
  *
- * Description: Signup
- *
+ * @desc load sign up view
  *
  */
 router.get('/signup', userLib.requireNoLogin, function(req, res) {
 	
 	'use strict';
-	
 	res.render('auth/signup');
 	
 });
 
 /*
- * Route: /logout
- * Method: GET
+ * @route /logout
+ * @method GET
  *
- * Description: logout and redirect home
- *
+ * @desc logout and redirect home
  *
  */
 router.get('/logout', function(req, res) {
@@ -110,11 +99,10 @@ router.get('/logout', function(req, res) {
 
 
 /**
- * Route: /forgot
- * Method: GET
+ * @route /forgot
+ * @method GET
  *
- * Description: forgot
- *
+ * @desc forgot
  *
  */
 router.get('/forgot', userLib.requireNoLogin, function(req, res) {
@@ -125,104 +113,69 @@ router.get('/forgot', userLib.requireNoLogin, function(req, res) {
 });
 
 /**
- * Route: /forgot
- * Method: POST
+ * @route /forgot
+ * @method POST
  *
- * Description: request a reset token and email
- *
+ * @desc request a reset token and email
  *
  */
 router.post('/forgot', userLib.requireNoLogin, function(req, res) {
 	
 	'use strict';
-	async.waterfall([
+	new UserModel({email: req.body.email}).fetch().then(function ( user ) {
 
-		// find user
-		function(callback) {
-			new UserModel({email: req.body.email}).fetch().then(function (user) {
+		if ( !user ) { throw messages.userNotFound; }
 
-				if (!user) {
-					return callback(messages.userNotFound, null);
-				}
+		return user;
 
-				callback(null, user.toJSON());
+	}).then( function( user) {
+		
+		return [user, tokenLib.generatePasswordToken( user.get('id') )];
+	
+	}).spread(function(user, token){
 
-			}).catch(function( error ) {
-				callback(error, null);
-			});
-		},
+		var link = (publicConfig.company.https ? 'https://' : 'http://') + publicConfig.company.domain + '/reset/' + token.get('token');
 
-		// add token to user
-		function(user, callback) {
+		var emailObj = {
+			transmissionBody: {
+				"substitution_data": {
+					"link": link
+				},
+				"content": {
+					"template_id": "password-template",
+					"from": {
+						"name": publicConfig.company.appName,
+						"email": publicConfig.company.email.support
+					}
+				},
+				"subject": "Password Reset",
+				recipients: [
+					{address: user.get('email')}
+				]
+			}
+		};
 
-			tokenLib.generatePasswordToken( user.id , function (error, token) {
-				callback(error, user, token);
-			});
+		return emailLib.send(emailObj);
 
-		},
-
-		// send email
-		function(user, token, callback) {
-
-			var link = (publicConfig.company.https ? 'https://' : 'http://') + publicConfig.company.domain + '/reset/' + token.token;
-
-			var emailObj = {
-				transmissionBody: {
-					"substitution_data": {
-						"link": link
-					},
-					"content": {
-						"template_id": "password-template",
-						"from": {
-							"name": publicConfig.company.appName,
-							"email": publicConfig.company.email.support
-						}
-					},
-					"subject": "Password Reset",
-					recipients: [
-						{address: user.email}
-					]
-				}
-			};
-
-			emailLib.send(emailObj, function(error, result){
-
-				if (error) {
-
-					callback(error, null);
-
-				} else {
-
-					callback(null, result);
-
-				}
-
-			});
-
-		}
-
-	], function( error, result )  {
-
-		if ( error ) {
-
-			winston.error( error );
-			res.jerror('Bad Request', error);
-
-		} else {
-
-			res.jsend();
-
-		}
-
+		
+	}).then(function(){
+		
+		res.jsend.success({});
+		
+	}).catch(function( error ) {
+		
+		console.error( error );
+		res.jsend.error( error );
+		
 	});
-
+	
 });
 
 /**
- * Route: /reset
- * Method: GET
+ * @route /reset
+ * @Method GET
  *
- * Description: redirect reset requests with no token
+ * @desc redirect reset requests with no token
  *
  *
  */
@@ -230,14 +183,13 @@ router.get('/reset/', userLib.requireNoLogin,  function(req, res) {
 	'use strict';
 	req.session.alert = messages.requiredToken;
 	res.redirect('/forgot');
-	
 });
 
 /**
- * Route: /reset/:token
- * Method: GET
+ * @route /reset/:token
+ * @method GET
  *
- * Description: reset token
+ * @desc reset token
  *
  *
  */
@@ -276,8 +228,9 @@ router.get('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 			}
 		}
 
-	}).catch(function () {
+	}).catch(function ( error ) {
 
+		console.error(error);
 		req.session.alert = messages.resetError;
 		res.redirect('/forgot');
 
@@ -285,11 +238,10 @@ router.get('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 });
 
 /**
- * Route: /reset/:token
- * Method: POST
+ * @route /reset/:token
+ * @method POST
  *
- * Description: reset the password
- *
+ * @desc reset the password
  *
  */
 router.post('/reset/:token', userLib.requireNoLogin,  function(req, res) {
@@ -301,74 +253,54 @@ router.post('/reset/:token', userLib.requireNoLogin,  function(req, res) {
 	var passwordConfirm = req.body.password_confirm;
 
 	if( !token ) {
-		return res.jerror('Bad Request', messages.requiredToken);
+		return res.jsend.fail(messages.requiredToken);
 	}
 
 	if( !password || !passwordConfirm ) {
-		return res.jerror('Bad Request', messages.requiredPassword);
+		return res.jsend.fail( messages.requiredPassword );
 	}
 
 	if( password !== passwordConfirm ) {
-		return res.jerror('Bad Request', messages.invalidPasswordsDontMatch);
+		return res.jsend.fail( messages.invalidPasswordsDontMatch );
 	}
 
-	new TokenModel({ token: token }).fetch().then(function( token ) {
+	new TokenModel({ token: token }).fetch({
+		withRelated: ['user']
+	}).then(function( token ) {
+		
+		if ( !token ) { throw messages.resetTokenNotFound; }
+		
+		var now = new Date();
 
-		 if ( !token ) {
+		if( token.get('expires_at') <= now ) { throw messages.resetTokenExpired; }
 
-			res.jerror('Bad Request', messages.resetTokenNotFound);
+		var userModel = new UserModel( token.get('user') );
 
-		} else {
+		userModel.set('password', password);
+		
+		return [token, userModel.save()];
 
-			var now = new Date();
+	}).spread(function( token, user ){
+		
+		req.logIn( user.toJSON(), function(error) {
 
-			if( token.get('expires_at') <= now ) {
+			if ( error ) { throw error; }
 
-				res.jerror('Bad Request', messages.resetTokenExpired);
+			token.set({active: false});
 
-			} else {
+			return token.save();
 
-				var user = new UserModel({id : token.get('user_id')});
-				user.fetch().then(function( user ) {
-
-					if ( !user ) {
-
-						res.jerror('Bad Request', messages.userNotFound);
-
-					} else {
-
-						user.set('password', password);
-
-						user.save().then( function( user ) {
-
-							req.logIn( user, function(error) {
-
-								if ( error ) {
-									return res.jerror('Bad Request', messages.loginError);
-								}
-
-								token.set({active: false});
-
-								token.save().then(function() {
-									res.jsend();
-								});
-
-							});
-						}).catch(function( error ) {
-							return res.jerror('Bad Request', messages.generalError);
-						});
-
-					}
-
-				}).catch( function( error ){
-					return res.jerror('Bad Request', messages.resetError);
-				});
-
-			}
-		}
-
-	}).catch(function(error) {
-		return res.jerror('Bad Request', messages.resetError);
+		});
+		
+	}).then(function(){
+		
+		res.jsend.success({});
+		
+	}).catch( function( error ) {
+		
+		console.error(errro);
+		res.jsend.error(error);
+		
 	});
 });
 

@@ -1,14 +1,15 @@
 /**
- * Filename	: /config/config-app-public.js
- * Description: Publicly viewable app config variables
+ * @file /config/config-app-public.js
+ * @desc Publicly viewable app config variables
  *
- * Notes:
+ * @notes
  */
 
 var message = require('./config-messages');
 var keys = require('./config-keys');
 
 var date = new Date();
+
 module.exports = {
 
 	production : PRODUCTION,

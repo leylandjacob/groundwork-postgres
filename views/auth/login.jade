@@ -1,21 +1,22 @@
 extends ../layout
 block content
-	.h-xs-100.container.text-xs-center
-		.v-center-xs.col-xs-12.col-sm-8.offset-sm-2.col-md-6.offset-md-3.col-lg-4.offset-lg-4
-			p.lead Log In
-			form(id="login", action="/login", method="POST", data-redirect=redirect ? redirect : '/')
-				.form-group
-					label.sr-only( for='email' ) Email Address
-					input.form-control(type='email', id='email', name="email", placeholder='email address')
-				.form-group
-					label.sr-only( for='password' ) Password
-					input.form-control(type='password', id='password', name="password", placeholder='password')
-				.form-group
-					button.trigger-login.btn.btn-primary.btn-loading.btn-block(type="submit",)
-						span.btn-loading-text Log In
-			//
-				small: a(href="/forgot", title="Forgot Password") Forgot Password?
-			br
-			.font--sm-1 
-				| Don't have an account? 
-				a(href="/signup", title="Sign Up") Sign Up
+	.h-xs-100.container.text-center
+		.v-center-xs.row
+			.col.col-sm-8.offset-sm-2.col-md-6.offset-md-3.col-lg-4.offset-lg-4
+				p Log In
+				form(id="login", action="/login", method="POST", data-redirect=redirect ? redirect : '/')
+					.form-group
+						label.sr-only( for='email' ) Email Address
+						input.form-control(type='email', id='email', name="email", placeholder='email address')
+					.form-group
+						label.sr-only( for='password' ) Password
+						input.form-control(type='password', id='password', name="password", placeholder='password')
+					.form-group
+						button.trigger-login.btn.btn-primary.btn-loading.btn-block(type="submit",)
+							span.btn-loading-text Log In
+				//
+					small: a(href="/forgot", title="Forgot Password") Forgot Password?
+				br
+				.font--sm-1 
+					| Don't have an account? 
+					a(href="/signup", title="Sign Up") Sign Up

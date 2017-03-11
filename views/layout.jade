@@ -1,12 +1,12 @@
 doctype html
-html
+html(lang="en")
 	head
 		include ./blocks/meta
 			
 		if config.environment === 'local'
 			script(src="//localhost:35729/livereload.js")
 			
-		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='/builds/style.3f40c80099b7e5f06a84df0ef3c85662.css')
 		
 		script(type='text/javascript', src="/node_modules/tether/dist/js/tether.min.js")
 
@@ -36,4 +36,4 @@ html
 			include ./blocks/tracking
 	
 	if config.production
-		script(type="text/javascript", src='/javascripts/main-built.js')
+		script(type="text/javascript", src='/builds/main-built.dda29a28b1ce3f3fc86dd5c7f59b76a2.js')

@@ -1,8 +1,8 @@
 /*
- * File Name : app.js 
- * Description: Bootstraps the application and sets all routes
+ * @file app.js 
+ * @desc start the application
  *
- * Notes: 
+ * @notes
  * 
 */
 
@@ -23,6 +23,7 @@ var keys = require("./config/config-keys");
 var session = require('express-session');
 var passport = require('passport');
 var robots = require('robots.txt');
+var jsend = require('jsend');
 
 var pg = require('pg');
 pg.defaults.ssl = true;
@@ -38,12 +39,8 @@ bookshelf.plugin('pagination');
 
 var publicConfig = require('./config/config-app-public');
 var appLib = require('./libs/app');
+var apiLib = require('./libs/api');
 var authLib = require('./libs/auth');
-var Utils = require('./libs/utils');
-
-
-// logging
-var winston = require('winston');
 
 // start the app
 var app = express();
@@ -65,13 +62,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: PRODUCTION ? 604800000 : 0 }));
 app.use(session({
-	store: new RedisStore({
-		url: keys.redis.url,
-		logErrors: true,
-		no_ready_check: true
-	}),
+	//store: new RedisStore({
+	//	url: keys.redis.url,
+	//	logErrors: true,
+	//	no_ready_check: true
+	//}),
+	cookie: {
+		maxAge: 5259492000,
+		domain: PRODUCTION ? '.example.com' : ''
+	},
 	secret: keys.secret,
 	resave: true,
 	saveUninitialized: true,
@@ -80,66 +81,47 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(jsend.middleware);
 
 // api routes
-app.all('/api/*', Utils.authApiRequest );
+app.all('/api/*', apiLib.authApiRequest );
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/', require('./routes/api/core'));
 
 
 // add locals to all routes
-app.all('*', function(req, res, next) {
-	appLib.setLocals(req, res, next);
+app.all('*', appLib.setLocals, function(req, res, next) {
+	'use strict';
+	console.log('Next');
+	next();
 });
 
 // routes
 app.use('/', require('./routes/app'));
 app.use('/', require('./routes/auth'));
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-
+	
+	'use strict';
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
+	
 });
 
 // error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-	
-    app.use(function(err, req, res, next) {
-
-		'use strict';
-		
-        res.status(err.status || 500);
-        winston.error(err.message);
-
-        res.render('error', {
-            message: err.message,
-            error: err,
-			config: publicConfig
-        });
-
-    });
-}
-
-// production error handler
-// no stack traces leaked to user
 app.use(function(err, req, res, next) {
 	
 	'use strict';
-    res.status(err.status || 500);
-    winston.error(err.message);
-
-    res.render('error', {
-        message: err.message,
-        error: {},
+	res.status(err.status || 500);
+	console.error(err);
+	
+	res.render('error', {
+		message: err.message,
+		error: err,
 		config: publicConfig
-    });
+	});
 
 });
 

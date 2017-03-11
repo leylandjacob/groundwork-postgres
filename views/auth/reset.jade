@@ -1,14 +1,15 @@
 extends ../layout
 block content
-	.h-xs-100.container.text-xs-center
-		.v-center-xs.col-xs-12.col-sm-8.offset-sm-2.col-md-6.offset-md-3.col-lg-4.offset-lg-4
-			p.lead Forgot
-			form(id="submit-reset", accept-charset="UTF-8", action="/reset/#{token}", method="POST")
-				.form-group
-					label.sr-only(for='password' ) New Password
-					input(id="password", type="password", name="password", placeholder="new password")
-				.form-group
-					label.sr-only(for='password_confirm' ) Confirm New Password
-					input(id="password_confirm", type="password", name="password_confirm", placeholder="confirm password")
-				.form-group
-					button(class="trigger-submit-reset") Reset Password
+	.h-xs-100.container.text-center
+		.v-center-xs.row
+			.col.col-sm-8.offset-sm-2.col-md-6.offset-md-3.col-lg-4.offset-lg-4
+				p Forgot
+				form(id="submit-reset", accept-charset="UTF-8", action="/reset/#{token}", method="POST")
+					.form-group
+						label.sr-only(for='password' ) New Password
+						input(id="password", type="password", name="password", placeholder="new password")
+					.form-group
+						label.sr-only(for='password_confirm' ) Confirm New Password
+						input(id="password_confirm", type="password", name="password_confirm", placeholder="confirm password")
+					.form-group
+						button(class="trigger-submit-reset") Reset Password

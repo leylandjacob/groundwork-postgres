@@ -4,14 +4,14 @@
  *
  */
 define([
-
 	'jquery',
 	'underscore',
 	'backbone',
 	'utils',
-	'models/user'
+	'models/core',
+	'collections/core'
 
-],	function($, _, Backbone, Utils, UserModel){
+],	function($, _, Backbone, Utils, Model, Collection){
 
 	'use strict';
 	
@@ -29,28 +29,22 @@ define([
 		},
 
 		/**
-		 * initialize()
-		 * @desc intialize the view
-		 *
+		 * @desc initialize the view
 		 *
 		 */
 		initialize: function(){
-
+			console.log('-- Auth View --');
+			this.messages = Utils.getConfig().messages;
 		},
 
 		/**
-		 * render()
 		 * @desc Render the view
 		 *
-		 *
 		 */
-		render: function(){
-
-		},
+		render: function(){},
 
 		/**
-		 * signup()
-		 *
+		 * @desc handle sign up
 		 *
 		 * @param event
 		 */
@@ -60,23 +54,24 @@ define([
 			
 			var $button = $(event.currentTarget);
 
+			var $form = $('#signup');
+			var redirect = $form.attr('data-redirect');
 			var $email = $('input[name="email"]');
 			var $password = $('input[name="password"]');
-			var messages = Utils.getConfig().messages;
 			
 			var email = $email.val().toLowerCase();
 			var password = $password.val();
 
 			// email required
 			if(!email){
-				Utils.alert( messages.requiredEmail );
-				$email.focus()
+				Utils.alert( this.messages.requiredEmail );
+				$email.focus();
 				return;
 			}
 
 			// valid email required
 			if(!Utils.validateEmail(email)){
-				Utils.alert( messages.invalidEmail );
+				Utils.alert( this.messages.invalidEmail );
 				$email.focus();
 				return;
 			}
@@ -86,31 +81,21 @@ define([
 				$password.focus();
 				return;
 			}
-
-			this.user = new UserModel();
 			
 			Utils.buttonLoading($button);
 
-			this.user.save( { email : email, password: password } , {
-				success: function(model, response, options) {
-
-					Utils.buttonReset($button);
-					
-					if(response.status === 'error'){
-
-						Utils.alert(response.message);
-						return;
-					}
-
-					window.location = "/";
-
-				}
+			new Model({ email : email,  password: password }, { 
+				modelName: 'users'
+			}).save().success(function(){
+				window.location = redirect;
+			}).fail(function(){
+				console.log('FAIL')
+				Utils.buttonReset($button);
 			});
 		},
 
 		/**
-		 * login()
-		 *
+		 * @desc handle login
 		 *
 		 * @param event
 		 */
@@ -122,42 +107,35 @@ define([
 
 			var form = $('#login');
 
-			var redirect = form.attr('data-redirect') ? form.attr('data-redirect') : '/';
-
+			var redirect = form.attr('data-redirect');
 			var $email = $('input[name="email"]');
 			var $password = $('input[name="password"]');
-			var messages = Utils.getConfig().messages;
 
 			var email = $email.val().toLowerCase();
 			var password = $password.val();
 
 			// email required
 			if(!email){
-				Utils.alert( messages.requiredEmail );
+				Utils.alert( this.messages.requiredEmail );
 				$email.focus();
 				return;
 			}
 
 			// password required
 			if(!password){
-				Utils.alert( messages.requiredPassword );
+				Utils.alert( this.messages.requiredPassword );
 				$password.focus();
 				return;
 			}
 
 			Utils.buttonLoading($button);
 			
-			$.post(form.attr('action'), form.serialize(), function(response) {
-				
+			$.post(form.attr('action'), form.serialize()).success(function(){
+				window.location = redirect;
+			}).fail(function(response){
+				Utils.alert(response);
 				Utils.buttonReset($button);
-				
-				if(response.status === 'error') {
-					Utils.alert(response.message);
-				} else {
-					window.location = redirect;
-				}
-
-			}, 'json');
+			});
 			
 			return false;
 			
@@ -165,12 +143,14 @@ define([
 
 		/**
 		 * 
-		 * requestReset
+		 * @desc request a password reset link
 		 * 
 		 * @param event
 		 * @returns {boolean}
 		 */
 		requestReset: function(event) {
+			
+			var _this = this;
 
 			event.preventDefault();
 
@@ -180,16 +160,15 @@ define([
 
 			var email = $('input[name="email"]').val();
 
-			var messages = Utils.getConfig().messages;
-
 			// email required
 			if(!email){
-				Utils.alert(messages.requiredEmail);
+				Utils.alert( this.messages.requiredEmail );
 				return;
 			}
 
+			// validate email
 			if(!Utils.validateEmail(email)){
-				Utils.alert(messages.invalidEmail);
+				Utils.alert( this.messages.invalidEmail );
 				return;
 			}
 
@@ -199,15 +178,12 @@ define([
 
 				Utils.buttonReset($button);
 				
-				if(response.status === 'error') {
+				if(response.status !== 'success') {
+					Utils.alert(response);
+					return;
+				} 
 
-					Utils.alert(response.message);
-
-				} else {
-
-					Utils.alert(messages.resetSuccess);
-
-				}
+				Utils.alert(_this.messages.resetSuccess);
 
 			}, 'json');
 			
@@ -217,7 +193,7 @@ define([
 
 		/**
 		 *
-		 * submitReset
+		 * @desc submit a password reset
 		 * 
 		 * @param event
 		 * @returns {boolean}
@@ -239,18 +215,14 @@ define([
 			Utils.buttonLoading($button);
 
 			$.post(form.attr('action'), form.serialize(), function(response) {
-
-				Utils.buttonReset($button);
 				
-				if(response.status === 'error') {
-
-					Utils.alert(response.message);
-
-				} else {
-
-					window.location = "/";
-
+				if(response.status !== 'success') {
+					Utils.buttonReset($button);
+					Utils.alert(response);
+					return;
 				}
+
+				window.location = "/";
 
 			}, 'json');
 			

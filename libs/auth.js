@@ -1,20 +1,21 @@
 /**
- * File Name : libs/auth.js 
- * Description: Auth Library
+ * @file libs/auth.js 
+ * @desc Auth Library
  *
- * Notes: 
+ * @notes 
  * 
  */
+
+// required modules
 var express = require('express');
 var passport = require('passport');
-var winston = require('winston');
 var LocalStrategy = require('passport-local').Strategy;
 var keys = require('../config/config-keys');
-var messages = require('../config/config-messages');
+var Messages = require('../config/config-messages');
 var UserModel = require('../models/user');
 
 /**
- * Serialize the user in to the session
+ * @desc Serialize the user in to the session
  */
 passport.serializeUser(function(user, done) {
 	'use strict';
@@ -22,7 +23,7 @@ passport.serializeUser(function(user, done) {
 });
 
 /**
- * Deserialize the user in to the session
+ * @desc Deserialize the user in to the session
  */
 passport.deserializeUser(function(id, done) {
 	'use strict';
@@ -36,46 +37,46 @@ passport.deserializeUser(function(id, done) {
 });
 
 /**
- *
- * Setup the Passport local authentication.
- *
- *
+ * @desc setup Passport local authentication strategy
  */
-passport.use(new LocalStrategy({
-        usernameField: 'email'
-    },
-    function(email, password, done) {
-
+passport.use(new LocalStrategy({ usernameField: 'email' }, 
+	
+	function(email, password, done) {
+		
 		'use strict';
+		
+		new UserModel({ email: email }).fetch().then(function(user) {
+		
+			if (!user) { throw 'userNotFound'; }
+			return user;
+			
+		}).then(function(user){
+			
+			// compare the passwords
+			user.comparePassword(password, function(error, isMatch) {
 
-        new UserModel({ email: email }).fetch().then(function(user) {
-
-            if (!user) {
-                return done(null, false, messages.userNotFound);
-            }
-
-            // compare the passwords
-            user.comparePassword(password, function(error, isMatch) {
-
-                if (error) {
-                    winston.error(error.message ? error.message : 'Error comparing passwords.');
-                    return done(messages.loginError);
-                }
-
-                if(!isMatch) {
-                    return done(null, false, messages.passwordIncorrect);
-                }
-
-				var now = new Date();
-
-                user.save({ last_login_at : now }).then(function(user){
-                    return done(null, user);
-                });
-
-            });
-        }).catch(function(error) {
-                winston.error(error.message);
-                return done(messages.loginError);
-        });
-    }
+				if (error) { throw error;}
+				if (!isMatch) {throw 'passwordIncorrect'; }
+				return user;
+				
+			});
+			
+		}).then(function(user){
+			
+			var now = new Date();
+			return user.save({ last_login_at : now });
+			
+		}).then(function(user){
+			
+			return done(null, user);
+			
+		}).catch(function(error) {
+			
+			if (error === 'userNotFound') { return done(null, false, Messages.userNotFound); }
+			if (error === 'passwordIncorrect') { return done(null, false, Messages.passwordIncorrect); }
+			console.error(error);
+			return done(error);
+			
+		});
+	}
 ));

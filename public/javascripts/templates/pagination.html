@@ -1,0 +1,50 @@
+<nav class="text-xs-center">
+	<!--<ul class="">-->
+	<!--<li class="page-item trigger-previous-page <%= pagination.page === 1 ? 'disabled' : ''%>">-->
+	<!--<a class="page-link" href="#" aria-label="Previous">-->
+	<!--<span aria-hidden="true">&laquo;</span>-->
+	<!--<span class="sr-only">Previous</span>-->
+	<!--</a>-->
+	<!--</li>-->
+
+	<%
+	var count = 5;
+	var start = pagination.page;
+	var max = pagination.pageCount + 1;
+	var end = (pagination.page + count) <  max ? (pagination.page + count) : pagination.page + (max - pagination.page)
+	%>
+
+	<!--<% if(start > 1) { %>-->
+	<!--<li class="page-item">-->
+	<!--<a class="page-link trigger-jump-page" data-page="<%= start < count ? 1 : ( start - count ) %>" href="#">-->
+	<!--...-->
+	<!--</a>-->
+	<!--</li>-->
+	<!--<% } %>-->
+
+	<!--<% _.each(_.range(start, end), function(page){ %>-->
+	<!--<li class="page-item <%= pagination.page === page ? 'active' : ''%>">-->
+	<!--<a class="page-link trigger-jump-page" data-page="<%= page %>" href="#">-->
+	<!--<%= page %>-->
+	<!--<% if(pagination.page === page){ %>-->
+	<!--<span class="sr-only">(current)</span>-->
+	<!--<% } %>-->
+	<!--</a>-->
+	<!--</li>-->
+	<!--<% }); %>-->
+
+	<!--<% if(max > end && pagination.page < max) { %>-->
+	<!--<li class="page-item">-->
+	<!--<a class="page-link trigger-jump-page" data-page="<%= end %>" href="#">-->
+	<!--...-->
+	<!--</a>-->
+	<!--</li>-->
+	<!--<% } %>-->
+	<!--</ul>-->
+	<% if( pagination.page !== pagination.pageCount ){ %>
+	<a class="trigger-next-page btn btn-outline-primary" href="#" aria-label="Load More">
+		<span aria-hidden="true">Load More</span>
+		<span class="sr-only">Load More</span>
+	</a>
+	<% } %>
+</nav>

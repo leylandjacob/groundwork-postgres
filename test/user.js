@@ -52,12 +52,4 @@ describe("UserClass", function(){
 
     });
 
-    describe(".updateIntercom()", function(){
-
-        it("should update an intercom user", function(){
-            //TODO: Add intercom test with test data
-        });
-
-    });
-
 });

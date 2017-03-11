@@ -1,28 +1,18 @@
 /**
- * File Name : libs/users.js
- * Description: User Library
+ * @file libs/users.js
+ * @desc User Library
  *
- * Notes:
+ * @notes
  * 
  */
 
 // required modules
-var keys = require('../config/config-keys');
-var Intercom = require('intercom.io');
-
-var UserModel = require('../models/user');
-
-var intercom_settings = {
-  apiKey: keys.intercom.apiKey,
-  appId: keys.intercom.appId
-};
 
 module.exports = {
 
 	/**
-	 * requireLogin()
 	 *
-     * @desc if !user redirect
+     * @desc if user continue
      *
 	 * @param req
 	 * @param res
@@ -31,17 +21,14 @@ module.exports = {
 	requireLogin: function(req, res, next) {
 
 		'use strict';
+		if(req.user){ return next();}
+		return res.redirect('/');
 		
-		if(!req.user){
-			return res.redirect('/');
-		}
-		next();
 	},
 
 	/**
-	 * requireNoLogin()
-     *
-     * @desc if user redirect
+	 *
+	 * @desc if !user continue
 	 *
 	 * @param req
 	 * @param res
@@ -50,39 +37,8 @@ module.exports = {
 	requireNoLogin: function(req, res, next) {
 		
 		'use strict';
-		
-		if(req.user){
-			return res.redirect('/');
-		}
-		next();
-	},
-
-	/**
-	 * updateIntercom() 
-	 * 
-	 *
-	 * @param {Object} user
-	 * @param {Function} callback
-	 *
-	 */
-	updateIntercom: function(user, callback){
-
-		'use strict';
-		
-		var intercom = new Intercom(intercom_settings);
-	
-		intercom.updateUser({
-			"user_id" : user._id,
-			"email" : user.email,
-			"name" : user.username,
-			"custom_data": {
-				"active": user.active
-			}  
-	
-		}, function(error, response) {
-		
-			callback(error, response);
-		
-		});	
+		if(!req.user){ return next(); }
+		return res.redirect('/');
 	}
+	
 };

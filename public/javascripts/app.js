@@ -7,11 +7,12 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'bootstrap',
 	'utils',
 	'config',
 	'router'
   
-],	function($, _, Backbone, Utils, config, Router){
+],	function($, _, Backbone, Bootstrap, Utils, config, Router){
 	
 	var initialize = function(){
 

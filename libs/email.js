@@ -1,13 +1,14 @@
 /**
- * File Name : libs/email.js
- * Description: Email Library
+ * @file libs/email.js
+ * @desc Email Library
  *
- * Notes:
+ * @notes
  *
  */
 
 // required modules
 var keys = require('../config/config-keys');
+var Promise = require("bluebird");
 
 // sparkpost
 var SparkPost = require('sparkpost');
@@ -16,24 +17,21 @@ var sparkpostClient = new SparkPost(keys.sparkpost.apiKey);
 module.exports = {
 
 	/**
-	 * send() sends an email template
+	 * @desc sends an email template
 	 *
 	 * @param {Object} emailObj
-	 * @param {Function} callback
+	 * @return {*}
 	 */
-	send: function(emailObj, callback) {
-
+	send: function(emailObj) {
+		
 		'use strict';
-
-		sparkpostClient.transmissions.send(emailObj, function(error, res) {
-			if (error) {
-				winston.log(error);
-				callback(error, null);
-			} else {
-				callback(null, res);
-			}
+		return new Promise(function (resolve, reject) {
+			sparkpostClient.transmissions.send(emailObj, function(error, res) {
+				if (error) { reject( error ); }
+				resolve(res);
+			});
 		});
-
+		
 	}
 
 };

@@ -1,10 +1,9 @@
 /**
- * Filename	: /config/config-messages.js
- * Description: Publicly viewable messages shared server and client side and returned as part of the site config
+ * @file /config/config-messages.js
+ * @desc Publicly viewable messages shared server and client side and returned as part of the site config
  *
- * Notes:
+ * @notes
  */
-var date = new Date();
 module.exports = {
 
     // global messages

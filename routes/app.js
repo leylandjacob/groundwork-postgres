@@ -1,8 +1,8 @@
 /*
- * File Name : routes/app.js 
- * Description: Home and App routes
+ * @file routes/app.js 
+ * @desc Home and App routes
  *
- * Notes: 
+ * @notes
  * 
 */
  
@@ -10,37 +10,34 @@
 var express = require('express');
 var router = express.Router();
 
-//libs
-var messages = require('../config/config-messages');
-
 /*
- * Route: /
- * Method: GET
+ * @route /
+ * @method GET
  *
- * Description: load home page or load dashboard
+ * @desc load home page or load dashboard
  * 
- *
 */
 router.get('/',  function(req, res) {
 
 	'use strict';
 	
-	if (req.user) {
-
-		res.render('app');
-
-	} else {
-
-		res.render('home');
-
-	}
+	if (req.user) { return res.render('app'); }
+	
+	res.render('home');
+	
 	
 });
 
+/*
+ * @route /styles
+ * @method GET
+ *
+ * @desc load style guide
+ * 
+ */
 router.get('/styles',  function(req, res) {
 
 	'use strict';
-
 	res.render('styles');
 
 });
