@@ -1,0 +1,50 @@
+{
+  "name": "groundwork-postgres",
+  "description": "A starter app for Node + Postgres",
+  "repository": "https://github.com/leylandjacob/groundwork-postgres.git",
+  "env": {
+	"NODE_ENV" : {
+	  "value": "development"
+	},
+	"APP_SECERET": {
+	  "generator": "secret"
+	},
+	"APP_TOKEN": {
+	  "value": "secret"
+	},
+	"PGSSLMODE" : {
+	  "value" : true
+	},
+	"DATABASE_PREFIX": {
+	  "value": ""
+	},
+	"ERROR_PAGE_URL": {
+	  "value": ""
+	},
+	"MAINTENANCE_PAGE_URL" : {
+	  "value": ""
+	}
+  },
+  "addons": [
+	{
+	  "plan": "papertrail:choklad"
+	},
+	{
+	  "plan": "heroku-postgresql:hobby-dev"
+	},
+	{
+	  "plan": "heroku-redis:hobby-dev"
+	},
+	{
+	  "plan" : "newrelic:wayne"
+	}
+  ],
+  "buildpacks": [
+	{
+	  "url": "heroku/ruby"
+	}, 
+	{
+	  "url": "heroku/node"
+	}
+  ]
+}
