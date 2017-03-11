@@ -19,7 +19,7 @@
 	},
 	"DATABASE_PREFIX": {
 	  "description": "8 character string followed by an underscore.",
-	  "value": "1A2B3C4D_"
+	  "value": ""
 	},
 	"ERROR_PAGE_URL": {
 	  "value": "http://"
