@@ -15,17 +15,17 @@
 	  "value": ""
 	},
 	"PGSSLMODE" : {
-	  "value" : true
+	  "value" : "true"
 	},
 	"DATABASE_PREFIX": {
 	  "description": "8 character string followed by an underscore.",
 	  "value": "1A2B3C4D_"
 	},
 	"ERROR_PAGE_URL": {
-	  "value": ""
+	  "value": "http://"
 	},
 	"MAINTENANCE_PAGE_URL" : {
-	  "value": ""
+	  "value": "http://"
 	}
   },
   "addons": [
