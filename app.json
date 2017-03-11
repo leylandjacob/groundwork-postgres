@@ -47,7 +47,7 @@
 	  "url": "heroku/ruby"
 	}, 
 	{
-	  "url": "heroku/node"
+	  "url": "heroku/nodejs"
 	}
   ]
 }
