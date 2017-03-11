@@ -1,5 +1,5 @@
 {
-  "name": "groundwork-postgres",
+  "name": "Groundwork Postgres",
   "description": "A starter app for Node + Postgres",
   "repository": "https://github.com/leylandjacob/groundwork-postgres.git",
   "env": {
@@ -7,16 +7,19 @@
 	  "value": "development"
 	},
 	"APP_SECERET": {
-	  "generator": "secret"
+	  "description": "32 character string.",
+	  "value": ""
 	},
 	"APP_TOKEN": {
-	  "value": "secret"
+	  "description": "32 character string to be placed in DB.",
+	  "value": ""
 	},
 	"PGSSLMODE" : {
 	  "value" : true
 	},
 	"DATABASE_PREFIX": {
-	  "value": ""
+	  "description": "8 character string followed by an underscore.",
+	  "value": "1A2B3C4D_"
 	},
 	"ERROR_PAGE_URL": {
 	  "value": ""

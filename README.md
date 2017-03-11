@@ -1,5 +1,8 @@
 # Groundwork Postgres
-This is a starter project for Node and Postgres apps.
+A starter app for Node + Postgres
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/leylandjacob/groundwork-postgres)
+
 
 ### Required
 `brew install node`  
